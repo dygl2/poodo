@@ -111,7 +111,9 @@ class DbProvider {
   }
 
   Future<List<Todo>> getTodoAll() async {
-    List<Map<String, dynamic>> maps = await _db.query('todo');
+    // query sorted todo list in ascending order
+    List<Map<String, dynamic>> maps =
+        await _db.query('todo', orderBy: 'date ASC');
     return List.generate(maps.length, (i) {
       return Todo(
           id: maps[i]['id'],
