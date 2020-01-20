@@ -56,13 +56,31 @@ class _TodoPageState extends State<TodoPage> {
                         children: <Widget>[
                           Expanded(
                             flex: 4,
-                            child: Text(_listTodo[index].content),
+                            child: Text(
+                              _listTodo[index].content,
+                              // highlight expired item
+                              style: TextStyle(
+                                  color: DateTime.now().isBefore(
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              _listTodo[index].date))
+                                      ? Colors.black
+                                      : Colors.redAccent),
+                            ),
                           ),
                           Expanded(
                             flex: 1,
-                            child: Text(DateFormat.yMMMd().format(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    _listTodo[index].date))),
+                            child: Text(
+                              DateFormat.yMMMd().format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      _listTodo[index].date)),
+                              // highlight expired item
+                              style: TextStyle(
+                                  color: DateTime.now().isBefore(
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              _listTodo[index].date))
+                                      ? Colors.black
+                                      : Colors.redAccent),
+                            ),
                           ),
                           Container(
                             width: 40,
