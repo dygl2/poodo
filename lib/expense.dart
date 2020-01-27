@@ -1,14 +1,19 @@
-abstract class Expense {
-  String _category;
-  int _cost;
+import 'package:poodo/data.dart';
 
-  Expense(this._category, this._cost);
+abstract class Expense extends Data {
+  int id;
+  String category;
+  DateTime date;
+  int cost;
 
-  String getName() {
-    return this._category;
-  }
+  Expense(this.id, this.category, this.date, this.cost);
 
-  int getCost() {
-    return this._cost;
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'category': category,
+      'date': date,
+      'cost': cost,
+    };
   }
 }
