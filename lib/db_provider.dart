@@ -62,7 +62,7 @@ class DbProvider {
               CREATE TABLE category
                 (
                   id INTEGER PRIMARY KEY,
-                  category TEXT,
+                  category TEXT
                 )
               """);
           newDb.execute("""
@@ -264,8 +264,43 @@ class DbProvider {
     }
   }
 
+  Future<List<Expense>> getExpenseAtDay(String category, int day) async {
+    List<Map<String, dynamic>> maps =
+        await _db.query(category, where: 'date = ?', whereArgs: [day]);
+    if (maps != null) {
+      return List.generate(maps.length, (i) {
+        switch (category) {
+          case 'food':
+            return Food(
+                id: maps[i]['id'],
+                category: maps[i]['category'],
+                date: maps[i]['date'],
+                cost: maps[i]['cost']);
+          case 'dailyuse':
+            return DailyUse(
+                id: maps[i]['id'],
+                category: maps[i]['category'],
+                date: maps[i]['date'],
+                cost: maps[i]['cost']);
+          case 'healthcare':
+            return HealthCare(
+                id: maps[i]['id'],
+                category: maps[i]['category'],
+                date: maps[i]['date'],
+                cost: maps[i]['cost']);
+          case 'luxury':
+            return Luxury(
+                id: maps[i]['id'],
+                category: maps[i]['category'],
+                date: maps[i]['date'],
+                cost: maps[i]['cost']);
+        }
+      });
+    }
+  }
+
   Future<List<Expense>> getExpenseInPeriod(
-      String category, String start, String end) async {
+      String category, int start, int end) async {
     List<Map<String, dynamic>> maps = await _db.query(category,
         where: 'date between = ? AND ?', whereArgs: [start, end]);
     if (maps != null) {

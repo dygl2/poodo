@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:poodo/todo_page.dart';
 import 'package:poodo/memo_page.dart';
 import 'package:poodo/want_page.dart';
+import 'package:poodo/log_page.dart';
 import 'package:poodo/theme.dart';
 import 'package:poodo/db_provider.dart';
 
@@ -16,6 +17,7 @@ class TabInfo {
 class MainApp extends StatelessWidget {
   final List<TabInfo> _tabs = [
     TabInfo("todo", TodoPage()),
+    TabInfo("log", LogPage(DateTime.now())),
     TabInfo("want", WantPage()),
     TabInfo("memo", MemoPage()),
   ];
