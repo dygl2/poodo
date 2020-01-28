@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:poodo/db_provider.dart';
+import 'package:poodo/log/dailyuse.dart';
+import 'package:poodo/log/edit_cost_dialog.dart';
 import 'package:poodo/log/expense.dart';
+import 'package:poodo/log/food.dart';
+import 'package:poodo/log/healthcare.dart';
 import 'package:poodo/log/log.dart';
+import 'package:poodo/log/luxury.dart';
 
 class LogPage extends StatefulWidget {
   final DateTime _date;
@@ -52,20 +58,25 @@ class _LogPageState extends State<LogPage> {
               icon: Icon(Icons.keyboard_arrow_left),
               onPressed: () {
                 _date = _date.subtract(new Duration(days: 1));
-                setState(() {});
+                setState(() {
+                  _init();
+                });
               },
             ),
             IconButton(
               icon: Icon(Icons.keyboard_arrow_right),
               onPressed: () {
                 _date = _date.add(new Duration(days: 1));
-                setState(() {});
+                setState(() {
+                  _init();
+                });
               },
             ),
             IconButton(
               icon: Icon(Icons.date_range),
               onPressed: () {
                 _setDate(context);
+                _init();
               },
             ),
           ],
@@ -78,7 +89,11 @@ class _LogPageState extends State<LogPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: <Widget>[
-                    Text('Total'),
+                    Text(
+                      'Total',
+                      style: TextStyle(
+                          fontSize: 32.0, fontStyle: FontStyle.italic),
+                    ),
                     Text(''),
                   ],
                 ),
@@ -87,24 +102,43 @@ class _LogPageState extends State<LogPage> {
             Expanded(
               flex: 1,
               child: Container(
-                //padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: <Widget>[
-                    FlatButton(
-                      child: Text('food'),
-                      onPressed: () {},
+                    Expanded(
+                      child: FlatButton(
+                        child: Text('food'),
+                        onPressed: () async {
+                          await Log.addLog(context, 'food', _date);
+                          _init();
+                        },
+                      ),
                     ),
-                    FlatButton(
-                      child: Text('daily use'),
-                      onPressed: () {},
+                    Expanded(
+                      child: FlatButton(
+                        child: Text('daily use'),
+                        onPressed: () async {
+                          await Log.addLog(context, 'dailyuse', _date);
+                          _init();
+                        },
+                      ),
                     ),
-                    FlatButton(
-                      child: Text('health care'),
-                      onPressed: () {},
+                    Expanded(
+                      child: FlatButton(
+                        child: Text('health care'),
+                        onPressed: () async {
+                          await Log.addLog(context, 'healthcare', _date);
+                          _init();
+                        },
+                      ),
                     ),
-                    FlatButton(
-                      child: Text('luxury'),
-                      onPressed: () {},
+                    Expanded(
+                      child: FlatButton(
+                        child: Text('luxury'),
+                        onPressed: () async {
+                          await Log.addLog(context, 'luxury', _date);
+                          _init();
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -117,16 +151,16 @@ class _LogPageState extends State<LogPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: _expenseItemList(_listFood),
+                      child: _expenseItemList('food', _listFood),
                     ),
                     Expanded(
-                      child: _expenseItemList(_listDailyuse),
+                      child: _expenseItemList('dailyuse', _listDailyuse),
                     ),
                     Expanded(
-                      child: _expenseItemList(_listHealthcare),
+                      child: _expenseItemList('healthcare', _listHealthcare),
                     ),
                     Expanded(
-                      child: _expenseItemList(_listLuxury),
+                      child: _expenseItemList('luxury', _listLuxury),
                     ),
                   ],
                 ),
@@ -150,30 +184,34 @@ class _LogPageState extends State<LogPage> {
     }
   }
 
-  Widget _expenseItemList(List<Expense> list) {
+  Widget _expenseItemList(String category, List<Expense> list) {
     return Container(
       child: ListView.builder(
         itemCount: list.length,
+        itemExtent: 50.0,
         scrollDirection: Axis.vertical,
+        //shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(
                       list[index].cost.toString(),
                       // highlight expired item
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.black, height: 0.0),
                     ),
-                  )
-                ],
-              ),
-              onTap: () {
-                setState(() {});
-              },
-            ),
+                  ],
+                ),
+                onTap: () async {
+                  await Log.updateLog(context, category, list[index].id, _date);
+                  _init();
+                },
+                onLongPress: () async {
+                  await Log.deleteLog(context, category, list, index);
+                  _init();
+                }),
           );
         },
       ),
