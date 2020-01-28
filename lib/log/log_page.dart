@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
+import 'package:poodo/log/aggregate.dart';
+import 'package:poodo/log/aggregate_dialog.dart';
 import 'package:poodo/log/dailyuse.dart';
 import 'package:poodo/log/edit_cost_dialog.dart';
 import 'package:poodo/log/expense.dart';
@@ -25,6 +27,7 @@ class _LogPageState extends State<LogPage> {
   List<Expense> _listDailyuse = [];
   List<Expense> _listHealthcare = [];
   List<Expense> _listLuxury = [];
+  Aggregate aggregate;
 
   _LogPageState(this._date);
 
@@ -33,6 +36,8 @@ class _LogPageState extends State<LogPage> {
     _listDailyuse = await Log.getLogAtDay('dailyuse', _date);
     _listHealthcare = await Log.getLogAtDay('healthcare', _date);
     _listLuxury = await Log.getLogAtDay('luxury', _date);
+
+    aggregate = await Log.getAggregate();
 
     setState(() {});
   }
@@ -74,8 +79,8 @@ class _LogPageState extends State<LogPage> {
             ),
             IconButton(
               icon: Icon(Icons.date_range),
-              onPressed: () {
-                _setDate(context);
+              onPressed: () async {
+                await _setDate(context);
                 _init();
               },
             ),
@@ -89,12 +94,32 @@ class _LogPageState extends State<LogPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      'Total',
-                      style: TextStyle(
-                          fontSize: 32.0, fontStyle: FontStyle.italic),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        'Total\t',
+                        style: TextStyle(
+                            fontSize: 32.0, fontStyle: FontStyle.italic),
+                      ),
                     ),
-                    Text(''),
+                    Expanded(
+                      flex: 5,
+                      child: Text(
+                        aggregate.total.toString(),
+                        style: TextStyle(
+                            fontSize: 32.0, fontStyle: FontStyle.italic),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                        flex: 1,
+                        child: IconButton(
+                          icon: Icon(Icons.info),
+                          onPressed: () {
+                            _init();
+                            AggregateDialog.displayDialog(context, aggregate);
+                          },
+                        ))
                   ],
                 ),
               ),

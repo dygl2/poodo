@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:poodo/log/aggregate.dart';
 import 'package:poodo/log/confirm_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/db_provider.dart';
@@ -21,6 +22,46 @@ class Log {
         category, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch);
 
     return list;
+  }
+
+  static Future<Aggregate> getAggregate() async {
+    Aggregate result = new Aggregate();
+    List<Expense> _listFood = await DbProvider().getExpenseAll('food');
+    List<Expense> _listDailyuse = await DbProvider().getExpenseAll('dailyuse');
+    List<Expense> _listHealthcare =
+        await DbProvider().getExpenseAll('healthcare');
+    List<Expense> _listLuxury = await DbProvider().getExpenseAll('luxury');
+
+    List<List<Expense>> _lists = [];
+    _lists.add(_listFood);
+    _lists.add(_listDailyuse);
+    _lists.add(_listHealthcare);
+    _lists.add(_listLuxury);
+
+    for (var ls in _lists) {
+      for (var item in ls) {
+        result.total += item.cost;
+
+        if (DateTime.fromMillisecondsSinceEpoch(item.date).year ==
+            DateTime.now().year) {
+          result.yearlyTotal += item.cost;
+          if (DateTime.fromMillisecondsSinceEpoch(item.date).month ==
+              DateTime.now().month) {
+            result.mothlyTotal += item.cost;
+            if ((DateTime.fromMillisecondsSinceEpoch(item.date).day -
+                            DateTime.now().day)
+                        .abs() <
+                    7 &&
+                DateTime.fromMillisecondsSinceEpoch(item.date).weekday -
+                        DateTime.now().weekday >
+                    0) {
+              result.weeklyTotal += item.cost;
+            }
+          }
+        }
+      }
+    }
+    return result;
   }
 
   static Future<void> addLog(
