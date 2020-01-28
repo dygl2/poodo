@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poodo/db_provider.dart';
-import 'package:poodo/edit_want_page.dart';
-import 'package:poodo/want.dart';
+import 'package:poodo/want/edit_want_page.dart';
+import 'package:poodo/want/want.dart';
 
 class WantPage extends StatefulWidget {
   @override

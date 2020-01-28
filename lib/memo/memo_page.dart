@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poodo/db_provider.dart';
-import 'package:poodo/edit_memo_page.dart';
-import 'package:poodo/memo.dart';
+import 'package:poodo/memo/edit_memo_page.dart';
+import 'package:poodo/memo/memo.dart';
 
 class MemoPage extends StatefulWidget {
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:poodo/todo_page.dart';
-import 'package:poodo/memo_page.dart';
-import 'package:poodo/want_page.dart';
+import 'package:poodo/todo/todo_page.dart';
+import 'package:poodo/memo/memo_page.dart';
+import 'package:poodo/want/want_page.dart';
 import 'package:poodo/log/log_page.dart';
 import 'package:poodo/theme.dart';
 import 'package:poodo/db_provider.dart';

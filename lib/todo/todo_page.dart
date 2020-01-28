@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
-import 'package:poodo/edit_todo_page.dart';
-import 'package:poodo/todo.dart';
+import 'package:poodo/todo/edit_todo_page.dart';
+import 'package:poodo/todo/todo.dart';
 
 class TodoPage extends StatefulWidget {
   @override
