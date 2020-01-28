@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:poodo/expense.dart';
+import 'package:poodo/log/expense.dart';
 import 'package:poodo/db_provider.dart';
 
 class Log {

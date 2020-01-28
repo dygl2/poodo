@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:poodo/expense.dart';
-import 'package:poodo/log.dart';
+import 'package:poodo/log/expense.dart';
+import 'package:poodo/log/log.dart';
 
 class LogPage extends StatefulWidget {
   final DateTime _date;

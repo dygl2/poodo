@@ -1,4 +1,3 @@
-import 'package:poodo/expense.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,11 +7,11 @@ import 'package:poodo/data.dart';
 import 'package:poodo/todo.dart';
 import 'package:poodo/memo.dart';
 import 'package:poodo/want.dart';
-import 'package:poodo/expense.dart';
-import 'package:poodo/food.dart';
-import 'package:poodo/dailyuse.dart';
-import 'package:poodo/healthcare.dart';
-import 'package:poodo/luxury.dart';
+import 'package:poodo/log/expense.dart';
+import 'package:poodo/log/food.dart';
+import 'package:poodo/log/dailyuse.dart';
+import 'package:poodo/log/healthcare.dart';
+import 'package:poodo/log/luxury.dart';
 
 class DbProvider {
   static Database _db;

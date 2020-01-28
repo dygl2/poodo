@@ -1,4 +1,4 @@
-import 'package:poodo/expense.dart';
+import 'package:poodo/log/expense.dart';
 
 class HealthCare extends Expense {
   HealthCare({int id, String category, DateTime date, int cost})
