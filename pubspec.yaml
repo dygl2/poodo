@@ -83,6 +83,17 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Raleway
+      fonts:
+      - asset: fonts/Raleway-Regular.ttf
+      - asset: fonts/Raleway-Italic.ttf
+        style: italic
+      - asset: fonts/Raleway-Bold.ttf
+      - asset: fonts/Raleway-BoldItalic.ttf
+    - family: Indie Flower
+      fonts:
+      - asset: fonts/IndieFlower-Regular.ttf
 
 flutter_icons:
   android: true

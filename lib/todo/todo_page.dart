@@ -11,12 +11,10 @@ class TodoPage extends StatefulWidget {
 
 class _TodoPageState extends State<TodoPage> {
   final String type = "todo";
-  DbProvider db = DbProvider();
   List<Todo> _listTodo = [];
   int _index = 0;
 
   void _init() async {
-    await db.database;
     _listTodo = await DbProvider().getTodoAll();
 
     setState(() {});

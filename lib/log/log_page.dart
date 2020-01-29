@@ -3,13 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
 import 'package:poodo/log/aggregate_dialog.dart';
-import 'package:poodo/log/dailyuse.dart';
-import 'package:poodo/log/edit_cost_dialog.dart';
 import 'package:poodo/log/expense.dart';
-import 'package:poodo/log/food.dart';
-import 'package:poodo/log/healthcare.dart';
 import 'package:poodo/log/log.dart';
-import 'package:poodo/log/luxury.dart';
 
 class LogPage extends StatefulWidget {
   final DateTime _date;
@@ -32,6 +27,8 @@ class _LogPageState extends State<LogPage> {
   _LogPageState(this._date);
 
   void _init() async {
+    await DbProvider().database;
+
     _listFood = await Log.getLogAtDay('food', _date);
     _listDailyuse = await Log.getLogAtDay('dailyuse', _date);
     _listHealthcare = await Log.getLogAtDay('healthcare', _date);

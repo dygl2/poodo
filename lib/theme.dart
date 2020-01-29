@@ -8,7 +8,8 @@ final ThemeData themeData = new ThemeData(
     primarySwatch: customSwatch,
     primaryColor: CustomColors.theme[500],
     primaryColorBrightness: Brightness.light,
-    accentColor: CustomColors.accent[500]);
+    accentColor: CustomColors.accent[500],
+    fontFamily: 'Raleway');
 
 const MaterialColor customSwatch =
     const MaterialColor(0xFFA4C639, const <int, Color>{

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:poodo/todo/todo_page.dart';
 import 'package:poodo/memo/memo_page.dart';
@@ -16,8 +18,8 @@ class TabInfo {
 
 class MainApp extends StatelessWidget {
   final List<TabInfo> _tabs = [
-    TabInfo("todo", TodoPage()),
     TabInfo("log", LogPage(DateTime.now())),
+    TabInfo("todo", TodoPage()),
     TabInfo("want", WantPage()),
     TabInfo("memo", MemoPage()),
   ];
@@ -38,7 +40,10 @@ class MainApp extends StatelessWidget {
             builder: (BuildContext context) {
               return Scaffold(
                 appBar: AppBar(
-                  title: Text('poodo'),
+                  title: Text(
+                    'poodo',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   actions: <Widget>[
                     PopupMenuButton(
                       icon: Icon(Icons.settings),
@@ -66,7 +71,10 @@ class MainApp extends StatelessWidget {
                     unselectedLabelColor: Colors.white.withOpacity(0.3),
                     unselectedLabelStyle: TextStyle(fontSize: 12.0),
                     labelColor: Colors.yellowAccent,
-                    labelStyle: TextStyle(fontSize: 16.0),
+                    labelStyle: TextStyle(
+                        fontSize: 16.0,
+                        fontFamily: 'Raleway',
+                        fontWeight: FontWeight.bold),
                     indicatorColor: Colors.white,
                     indicatorWeight: 2.0,
                     tabs: _tabs.map((TabInfo tab) {
