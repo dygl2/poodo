@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:poodo/memo.dart';
+import 'package:poodo/want/want.dart';
 
-class EditMemoPage extends StatelessWidget {
-  final Memo _memo;
+class EditWantPage extends StatelessWidget {
+  final Want _want;
   final Function _onChanged;
 
-  EditMemoPage(this._memo, this._onChanged);
+  EditWantPage(this._want, this._onChanged);
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Edit Memo'),
+          title: new Text('Edit Want'),
           actions: <Widget>[
             FlatButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -29,27 +29,27 @@ class EditMemoPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: <Widget>[
             new TextField(
-              controller: TextEditingController(text: _memo.title),
+              controller: TextEditingController(text: _want.title),
               decoration: InputDecoration(
-                labelText: "memo title",
+                labelText: "want title",
               ),
               maxLines: 2,
               style: new TextStyle(color: Colors.black),
               onChanged: (text) {
-                _memo.title = text;
-                _onChanged(_memo);
+                _want.title = text;
+                _onChanged(_want);
               },
             ),
             new TextField(
-              controller: TextEditingController(text: _memo.content),
+              controller: TextEditingController(text: _want.content),
               decoration: InputDecoration(
-                labelText: "memo content",
+                labelText: "want content",
               ),
               maxLines: 20,
               style: new TextStyle(color: Colors.black),
               onChanged: (text) {
-                _memo.content = text;
-                _onChanged(_memo);
+                _want.content = text;
+                _onChanged(_want);
               },
             ),
           ]),

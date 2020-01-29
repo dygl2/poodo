@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:poodo/want.dart';
+import 'package:poodo/memo/memo.dart';
 
-class EditWantPage extends StatelessWidget {
-  final Want _want;
+class EditMemoPage extends StatelessWidget {
+  final Memo _memo;
   final Function _onChanged;
 
-  EditWantPage(this._want, this._onChanged);
+  EditMemoPage(this._memo, this._onChanged);
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Edit Want'),
+          title: new Text('Edit Memo'),
           actions: <Widget>[
             FlatButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -29,27 +29,27 @@ class EditWantPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: <Widget>[
             new TextField(
-              controller: TextEditingController(text: _want.title),
+              controller: TextEditingController(text: _memo.title),
               decoration: InputDecoration(
-                labelText: "want title",
+                labelText: "memo title",
               ),
               maxLines: 2,
               style: new TextStyle(color: Colors.black),
               onChanged: (text) {
-                _want.title = text;
-                _onChanged(_want);
+                _memo.title = text;
+                _onChanged(_memo);
               },
             ),
             new TextField(
-              controller: TextEditingController(text: _want.content),
+              controller: TextEditingController(text: _memo.content),
               decoration: InputDecoration(
-                labelText: "want content",
+                labelText: "memo content",
               ),
               maxLines: 20,
               style: new TextStyle(color: Colors.black),
               onChanged: (text) {
-                _want.content = text;
-                _onChanged(_want);
+                _memo.content = text;
+                _onChanged(_memo);
               },
             ),
           ]),

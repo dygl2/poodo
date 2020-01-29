@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:poodo/todo.dart';
+import 'package:poodo/todo/todo.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
-import 'package:poodo/edit_todo_page.dart';
-import 'package:poodo/todo.dart';
+import 'package:poodo/todo/edit_todo_page.dart';
+import 'package:poodo/todo/todo.dart';
 
 class TodoPage extends StatefulWidget {
   @override
@@ -11,12 +11,10 @@ class TodoPage extends StatefulWidget {
 
 class _TodoPageState extends State<TodoPage> {
   final String type = "todo";
-  DbProvider db = DbProvider();
   List<Todo> _listTodo = [];
   int _index = 0;
 
   void _init() async {
-    await db.database;
     _listTodo = await DbProvider().getTodoAll();
 
     setState(() {});
