@@ -105,7 +105,7 @@ class _LogPageState extends State<LogPage> {
                     Expanded(
                       flex: 5,
                       child: Text(
-                        aggregate.total.toString(),
+                        aggregate.dayTotal.toString(),
                         style: TextStyle(
                             fontSize: 32.0, fontStyle: FontStyle.italic),
                         textAlign: TextAlign.center,

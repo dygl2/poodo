@@ -11,19 +11,36 @@ class AggregateDialog extends StatelessWidget {
           return AlertDialog(
             title: Text(_title),
             content: new Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  'Yearly Total\n' + aggregate.yearlyTotal.toString(),
+                  'Yearly Total (' + DateTime.now().year.toString() + ')\n',
+                  style: TextStyle(fontSize: 16.0),
+                  textAlign: TextAlign.end,
+                ),
+                Text(
+                  aggregate.yearlyTotal.toString(),
                   style: TextStyle(fontSize: 24.0),
                   textAlign: TextAlign.end,
                 ),
                 Text(
-                  '\nMonthly Total\n' + aggregate.mothlyTotal.toString(),
+                  '\nMonthly Total (' + DateTime.now().month.toString() + ')\n',
+                  style: TextStyle(fontSize: 16.0),
+                  textAlign: TextAlign.end,
+                ),
+                Text(
+                  aggregate.mothlyTotal.toString(),
                   style: TextStyle(fontSize: 24.0),
                   textAlign: TextAlign.end,
                 ),
                 Text(
-                  '\nWeekly Total\n' + aggregate.weeklyTotal.toString(),
+                  '\nWeekly Total\n',
+                  style: TextStyle(fontSize: 16.0),
+                  textAlign: TextAlign.end,
+                ),
+                Text(
+                  aggregate.weeklyTotal.toString(),
                   style: TextStyle(fontSize: 24.0),
                   textAlign: TextAlign.end,
                 ),

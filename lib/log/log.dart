@@ -40,8 +40,6 @@ class Log {
 
     for (var ls in _lists) {
       for (var item in ls) {
-        result.total += item.cost;
-
         if (DateTime.fromMillisecondsSinceEpoch(item.date).year ==
             DateTime.now().year) {
           result.yearlyTotal += item.cost;
@@ -56,6 +54,9 @@ class Log {
                         DateTime.now().weekday >
                     0) {
               result.weeklyTotal += item.cost;
+              if (item.date == DateTime.now().millisecondsSinceEpoch) {
+                result.dayTotal += item.cost;
+              }
             }
           }
         }

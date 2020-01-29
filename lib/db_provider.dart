@@ -31,7 +31,7 @@ class DbProvider {
 
       _db = await openDatabase(
         path,
-        version: 1,
+        version: 2,
         onCreate: (Database newDb, int version) {
           newDb.execute("""
               CREATE TABLE todo
