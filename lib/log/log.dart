@@ -24,7 +24,7 @@ class Log {
     return list;
   }
 
-  static Future<Aggregate> getAggregate() async {
+  static Future<Aggregate> getAggregate(DateTime targetDate) async {
     Aggregate result = new Aggregate();
     List<Expense> _listFood = await DbProvider().getExpenseAll('food');
     List<Expense> _listDailyuse = await DbProvider().getExpenseAll('dailyuse');
@@ -51,10 +51,11 @@ class Log {
                         .abs() <
                     7 &&
                 DateTime.fromMillisecondsSinceEpoch(item.date).weekday -
-                        DateTime.now().weekday >
+                        DateTime.now().weekday <=
                     0) {
               result.weeklyTotal += item.cost;
-              if (item.date == DateTime.now().millisecondsSinceEpoch) {
+              if (DateTime.fromMillisecondsSinceEpoch(item.date).day ==
+                  targetDate.day) {
                 result.dayTotal += item.cost;
               }
             }
