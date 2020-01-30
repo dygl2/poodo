@@ -100,6 +100,16 @@ class _LogPageState extends State<LogPage> {
                       ),
                     ),
                     Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        icon: Icon(Icons.info),
+                        onPressed: () {
+                          _init();
+                          AggregateDialog.displayDialog(context, aggregate);
+                        },
+                      ),
+                    ),
+                    Expanded(
                       flex: 5,
                       child: Text(
                         aggregate.dayTotal.toString(),
@@ -108,15 +118,6 @@ class _LogPageState extends State<LogPage> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          icon: Icon(Icons.info),
-                          onPressed: () {
-                            _init();
-                            AggregateDialog.displayDialog(context, aggregate);
-                          },
-                        ))
                   ],
                 ),
               ),
@@ -126,42 +127,10 @@ class _LogPageState extends State<LogPage> {
               child: Container(
                 child: Row(
                   children: <Widget>[
-                    Expanded(
-                      child: FlatButton(
-                        child: Text('food'),
-                        onPressed: () async {
-                          await Log.addLog(context, 'food', _date);
-                          _init();
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: FlatButton(
-                        child: Text('daily use'),
-                        onPressed: () async {
-                          await Log.addLog(context, 'dailyuse', _date);
-                          _init();
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: FlatButton(
-                        child: Text('health care'),
-                        onPressed: () async {
-                          await Log.addLog(context, 'healthcare', _date);
-                          _init();
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: FlatButton(
-                        child: Text('luxury'),
-                        onPressed: () async {
-                          await Log.addLog(context, 'luxury', _date);
-                          _init();
-                        },
-                      ),
-                    ),
+                    _setFlatButton(context, 'food', _date),
+                    _setFlatButton(context, 'dailyuse', _date),
+                    _setFlatButton(context, 'healthcare', _date),
+                    _setFlatButton(context, 'luxury', _date),
                   ],
                 ),
               ),
@@ -204,6 +173,20 @@ class _LogPageState extends State<LogPage> {
         _date = date;
       });
     }
+  }
+
+  Widget _setFlatButton(BuildContext context, String category, DateTime date) {
+    return Expanded(
+      child: RaisedButton(
+        color: Colors.yellow[200],
+        child: Text(category),
+        onPressed: () async {
+          await Log.addLog(context, category, date);
+          _init();
+        },
+        shape: UnderlineInputBorder(),
+      ),
+    );
   }
 
   Widget _expenseItemList(String category, List<Expense> list) {
