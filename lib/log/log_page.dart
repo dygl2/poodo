@@ -34,7 +34,7 @@ class _LogPageState extends State<LogPage> {
     _listHealthcare = await Log.getLogAtDay('healthcare', _date);
     _listLuxury = await Log.getLogAtDay('luxury', _date);
 
-    aggregate = await Log.getAggregate();
+    aggregate = await Log.getAggregate(_date);
 
     setState(() {});
   }
