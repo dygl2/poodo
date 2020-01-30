@@ -13,8 +13,10 @@ class EditCostDialog extends StatelessWidget {
           return AlertDialog(
             title: Text(_title),
             content: TextField(
+              autofocus: true,
               controller: _textController,
               decoration: InputDecoration(hintText: 'how much is cost?'),
+              keyboardType: TextInputType.number,
             ),
             actions: <Widget>[
               new FlatButton(
