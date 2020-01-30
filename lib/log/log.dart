@@ -71,7 +71,7 @@ class Log {
     final _dialog = new EditCostDialog(category);
     final result = await _dialog.displayDialog(context);
 
-    if (result.toString().isNotEmpty) {
+    if (result != null && result.toString().isNotEmpty) {
       switch (category) {
         case 'food':
           var tmp = new Food(
