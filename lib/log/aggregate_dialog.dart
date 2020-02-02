@@ -15,7 +15,9 @@ class AggregateDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  'Yearly Total (' + DateTime.now().year.toString() + ')\n',
+                  'Yearly Total (' +
+                      aggregate.targetDate.year.toString() +
+                      ')\n',
                   style: TextStyle(fontSize: 16.0),
                   textAlign: TextAlign.end,
                 ),
@@ -25,7 +27,9 @@ class AggregateDialog extends StatelessWidget {
                   textAlign: TextAlign.end,
                 ),
                 Text(
-                  '\nMonthly Total (' + DateTime.now().month.toString() + ')\n',
+                  '\nMonthly Total (' +
+                      aggregate.targetDate.month.toString() +
+                      ')\n',
                   style: TextStyle(fontSize: 16.0),
                   textAlign: TextAlign.end,
                 ),
