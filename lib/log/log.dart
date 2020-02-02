@@ -46,23 +46,45 @@ class Log {
           if (DateTime.fromMillisecondsSinceEpoch(item.date).month ==
               targetDate.month) {
             result.mothlyTotal += item.cost;
-            if ((DateTime.fromMillisecondsSinceEpoch(item.date).day -
-                            targetDate.day)
-                        .abs() <
-                    7 &&
-                DateTime.fromMillisecondsSinceEpoch(item.date).weekday -
-                        targetDate.weekday <=
-                    0) {
-              result.weeklyTotal += item.cost;
-              if (DateTime.fromMillisecondsSinceEpoch(item.date).day ==
-                  targetDate.day) {
-                result.dayTotal += item.cost;
-              }
+            if (DateTime.fromMillisecondsSinceEpoch(item.date).day ==
+                targetDate.day) {
+              result.dayTotal += item.cost;
             }
           }
         }
       }
     }
+
+    // weekly total cost
+    for (var ls in _lists) {
+      for (var item in ls) {
+        Duration tmp = DateTime.fromMillisecondsSinceEpoch(item.date)
+            .difference(targetDate);
+        if (tmp.inDays > 0) {
+          print(tmp.inDays);
+        }
+        if ((DateTime.fromMillisecondsSinceEpoch(item.date)
+                        .difference(targetDate)
+                        .inDays) <=
+                    0 &&
+                DateTime.fromMillisecondsSinceEpoch(item.date)
+                        .difference(targetDate)
+                        .inDays
+                        .abs() <=
+                    targetDate.weekday - 1 ||
+            (DateTime.fromMillisecondsSinceEpoch(item.date)
+                        .difference(targetDate)
+                        .inDays) >
+                    0 &&
+                DateTime.fromMillisecondsSinceEpoch(item.date)
+                        .difference(targetDate)
+                        .inDays <=
+                    (6 - targetDate.weekday)) {
+          result.weeklyTotal += item.cost;
+        }
+      }
+    }
+
     return result;
   }
 
