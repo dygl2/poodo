@@ -60,6 +60,12 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
+  assets:  
+   - assets/icons/very_bad.png
+   - assets/icons/not_very_good.png
+   - assets/icons/moderately_good.png
+   - assets/icons/very_good.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

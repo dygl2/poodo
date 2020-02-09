@@ -1,4 +1,6 @@
+import 'package:poodo/log/condition_log.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
@@ -17,6 +19,7 @@ class DbProvider {
   static Database _db;
   static DbProvider _cache = DbProvider._internal();
   String path = "";
+  DateFormat _format = DateFormat('yyyy-MM-dd');
 
   factory DbProvider() {
     return _cache;
@@ -31,7 +34,7 @@ class DbProvider {
 
       _db = await openDatabase(
         path,
-        version: 2,
+        version: 3,
         onCreate: (Database newDb, int version) {
           newDb.execute("""
               CREATE TABLE todo
@@ -102,6 +105,15 @@ class DbProvider {
                   date INTEGER,
                   cost INTEGER,
                   FOREIGN KEY (category) REFERENCES category(id) 
+                )
+              """);
+          newDb.execute("""
+              CREATE TABLE condition
+                (
+                  id INTEGER PRIMARY KEY,
+                  date String,
+                  category INTEGER,
+                  condition INTEGER
                 )
               """);
         },
@@ -336,6 +348,40 @@ class DbProvider {
                 cost: maps[i]['cost']);
         }
       });
+    }
+  }
+
+  Future<List<ConditionLog>> getConditionLog(
+      DateTime date, ConditionCategory category) async {
+    List<Map<String, dynamic>> maps = await _db.rawQuery(
+        "select * from condition" +
+            " where date = '" +
+            _format.format(date) +
+            "' and category = " +
+            category.index.toString());
+    if (maps != null && maps.length > 0) {
+      return List.generate(maps.length, (i) {
+        return ConditionLog(
+            id: maps[i]['id'],
+            date: maps[i]['date'],
+            category: maps[i]['category'],
+            condition: maps[i]['condition']);
+      });
+    } else {
+      insert(
+          'condition',
+          ConditionLog(
+              id: DateTime.now().millisecondsSinceEpoch,
+              date: _format.format(date),
+              category: category.index,
+              condition: Condition.MODERATELY_GOOD.index));
+      return List.generate(
+          1,
+          (_) => ConditionLog(
+              id: DateTime.now().millisecondsSinceEpoch,
+              date: _format.format(date),
+              category: category.index,
+              condition: Condition.MODERATELY_GOOD.index));
     }
   }
 }
