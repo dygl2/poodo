@@ -3,8 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
 import 'package:poodo/log/aggregate_dialog.dart';
+import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
+import 'package:poodo/log/condition_log.dart';
 
 class LogPage extends StatefulWidget {
   final DateTime _date;
@@ -22,6 +24,10 @@ class _LogPageState extends State<LogPage> {
   List<Expense> _listDailyuse = [];
   List<Expense> _listHealthcare = [];
   List<Expense> _listLuxury = [];
+  List<ConditionLog> _morningCondition;
+  List<ConditionLog> _noonCondition;
+  List<ConditionLog> _nightCondition;
+  int _conditionRank = 70;
   Aggregate aggregate;
 
   _LogPageState(this._date);
@@ -35,6 +41,11 @@ class _LogPageState extends State<LogPage> {
     _listLuxury = await Log.getLogAtDay('luxury', _date);
 
     aggregate = await Log.getAggregate(_date);
+
+    _morningCondition =
+        await Log.getConditionLog(_date, ConditionCategory.MORNING);
+    _noonCondition = await Log.getConditionLog(_date, ConditionCategory.NOON);
+    _nightCondition = await Log.getConditionLog(_date, ConditionCategory.NIGHT);
 
     setState(() {});
   }
@@ -136,7 +147,7 @@ class _LogPageState extends State<LogPage> {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Container(
                 //padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -155,6 +166,104 @@ class _LogPageState extends State<LogPage> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Text('morning'),
+                        IconButton(
+                            icon: _setConditionLog(
+                                _morningCondition[0].condition),
+                            onPressed: () async {
+                              var result =
+                                  await EditConditionDialog.displayDialog(
+                                      context);
+                              if (result != null) {
+                                _morningCondition[0].condition = result;
+                              }
+
+                              await DbProvider().update(
+                                  'condition',
+                                  _morningCondition[0],
+                                  _morningCondition[0].id);
+
+                              setState(() {
+                                _conditionRank = 100 -
+                                    _morningCondition[0].condition * 10 -
+                                    _noonCondition[0].condition * 10 -
+                                    _nightCondition[0].condition * 10;
+                              });
+                            }),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Text('noon'),
+                        IconButton(
+                            icon: _setConditionLog(_noonCondition[0].condition),
+                            onPressed: () async {
+                              var result =
+                                  await EditConditionDialog.displayDialog(
+                                      context);
+                              if (result != null) {
+                                _noonCondition[0].condition = result;
+                              }
+
+                              await DbProvider().update('condition',
+                                  _noonCondition[0], _noonCondition[0].id);
+
+                              setState(() {
+                                _conditionRank = 100 -
+                                    _morningCondition[0].condition * 10 -
+                                    _noonCondition[0].condition * 10 -
+                                    _nightCondition[0].condition * 10;
+                              });
+                            }),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Text('night'),
+                        IconButton(
+                            icon:
+                                _setConditionLog(_nightCondition[0].condition),
+                            onPressed: () async {
+                              var result =
+                                  await EditConditionDialog.displayDialog(
+                                      context);
+                              if (result != null) {
+                                _nightCondition[0].condition = result;
+                              }
+
+                              await DbProvider().update('condition',
+                                  _nightCondition[0], _nightCondition[0].id);
+
+                              setState(() {
+                                _conditionRank = 100 -
+                                    _morningCondition[0].condition * 10 -
+                                    _noonCondition[0].condition * 10 -
+                                    _nightCondition[0].condition * 10;
+                              });
+                            }),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text('Rank: ' + _conditionRank.toString()),
+                    ),
+                  )
+                ],
               ),
             ),
           ],
@@ -221,5 +330,26 @@ class _LogPageState extends State<LogPage> {
         },
       ),
     );
+  }
+
+  dynamic _setConditionLog(int cnd) {
+    Image ret;
+
+    switch (Condition.values[cnd]) {
+      case Condition.VERY_BAD:
+        ret = new Image.asset('assets/icons/very_bad.png');
+        break;
+      case Condition.NOT_VERY_GOOD:
+        ret = new Image.asset('assets/icons/not_very_good.png');
+        break;
+      case Condition.MODERATELY_GOOD:
+        ret = new Image.asset('assets/icons/moderately_good.png');
+        break;
+      case Condition.VERY_GOOD:
+        ret = new Image.asset('assets/icons/very_good.png');
+        break;
+    }
+
+    return ret;
   }
 }

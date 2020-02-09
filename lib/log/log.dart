@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/log/aggregate.dart';
+import 'package:poodo/log/condition_log.dart';
 import 'package:poodo/log/confirm_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/db_provider.dart';
@@ -181,5 +182,10 @@ class Log {
     if (result == true) {
       await DbProvider().delete(category, list[index].id);
     }
+  }
+
+  static Future<List<ConditionLog>> getConditionLog(
+      DateTime date, ConditionCategory category) async {
+    return DbProvider().getConditionLog(date, category);
   }
 }
