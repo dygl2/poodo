@@ -73,12 +73,12 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
     new charts.Series(
       id: 'monthly_category',
       domainFn: (MonthlyCategory monthlyCategory, _) =>
-          monthlyCategory.category,
+          monthlyCategory.category.toString().split('.')[1],
       measureFn: (MonthlyCategory monthlyCategory, _) =>
           monthlyCategory.percentage,
       colorFn: (MonthlyCategory monthlyCategory, _) => monthlyCategory.color,
       labelAccessorFn: (MonthlyCategory row, _) =>
-          '${row.category.toString().split('.')[1]}:\n${row.cost} (${row.percentage}%)',
+          '${row.cost}\n(${double.parse(row.percentage.toStringAsFixed(1))}%)',
       data: _monthlyCategory,
     ),
   ];
@@ -86,19 +86,27 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
   static var monthlyChart = new charts.PieChart(
     monthlySeries,
     animate: true,
+    behaviors: [
+      new charts.DatumLegend(position: charts.BehaviorPosition.bottom)
+    ],
     defaultRenderer: new charts.ArcRendererConfig(
-        arcWidth: 60, arcRendererDecorators: [new charts.ArcLabelDecorator()]),
+        //arcWidth: 60,
+        arcRendererDecorators: [
+          new charts.ArcLabelDecorator(
+              labelPosition: charts.ArcLabelPosition.auto)
+        ]),
   );
 
   static var yearlySeries = [
     new charts.Series(
       id: 'yearly_category',
-      domainFn: (YearlyCategory yearlyCategory, _) => yearlyCategory.category,
+      domainFn: (YearlyCategory yearlyCategory, _) =>
+          yearlyCategory.category.toString().split('.')[1],
       measureFn: (YearlyCategory yearlyCategory, _) =>
           yearlyCategory.percentage,
       colorFn: (YearlyCategory yearlyCategory, _) => yearlyCategory.color,
       labelAccessorFn: (YearlyCategory row, _) =>
-          '${row.category.toString().split('.')[1]}:\n${row.cost} (${row.percentage}%)',
+          '${row.cost}\n(${double.parse(row.percentage.toStringAsFixed(1))}%)',
       data: _yearlyCategory,
     ),
   ];
@@ -106,12 +114,14 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
   static var yearlyChart = new charts.PieChart(
     yearlySeries,
     animate: true,
-    behaviors: [new charts.SeriesLegend()],
+    behaviors: [
+      new charts.DatumLegend(position: charts.BehaviorPosition.bottom)
+    ],
     defaultRenderer: new charts.ArcRendererConfig(
-        arcWidth: 60,
+        //arcWidth: 60,
         arcRendererDecorators: [
           new charts.ArcLabelDecorator(
-              labelPosition: charts.ArcLabelPosition.inside)
+              labelPosition: charts.ArcLabelPosition.auto)
         ]),
   );
 
