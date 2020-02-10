@@ -114,8 +114,8 @@ class _LogPageState extends State<LogPage> {
                       flex: 1,
                       child: IconButton(
                         icon: Icon(Icons.info),
-                        onPressed: () {
-                          _init();
+                        onPressed: () async {
+                          await _init();
                           //AggregateDialog.displayDialog(context, aggregate);
                           Navigator.of(context).push(
                             MaterialPageRoute<void>(
@@ -297,7 +297,7 @@ class _LogPageState extends State<LogPage> {
         child: Text(category),
         onPressed: () async {
           await Log.addLog(context, category, date);
-          _init();
+          await _init();
         },
         shape: UnderlineInputBorder(),
       ),
@@ -326,11 +326,11 @@ class _LogPageState extends State<LogPage> {
                 ),
                 onTap: () async {
                   await Log.updateLog(context, category, list[index].id);
-                  _init();
+                  await _init();
                 },
                 onLongPress: () async {
                   await Log.deleteLog(context, category, list, index);
-                  _init();
+                  await _init();
                 }),
           );
         },
