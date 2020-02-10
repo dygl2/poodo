@@ -7,7 +7,6 @@ import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
 import 'package:poodo/log/condition_log.dart';
-import 'package:poodo/log/aggregate_category_page.dart';
 
 class LogPage extends StatefulWidget {
   final DateTime _date;
@@ -326,7 +325,7 @@ class _LogPageState extends State<LogPage> {
                   ],
                 ),
                 onTap: () async {
-                  await Log.updateLog(context, category, list[index].id, _date);
+                  await Log.updateLog(context, category, list[index].id);
                   _init();
                 },
                 onLongPress: () async {
