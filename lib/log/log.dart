@@ -12,12 +12,12 @@ import 'package:poodo/log/healthcare.dart';
 import 'package:poodo/log/luxury.dart';
 
 class Log {
-  static DateFormat _format = DateFormat('yyyy-MM-dd');
+  static DateFormat _format = DateFormat('yyyy-MM-dd', 'ja');
 
   static Future<List<Expense>> getLogAtDay(
       String category, DateTime date) async {
     DateTime start = DateTime.parse(_format.format(date));
-    DateTime end = start.add(new Duration(days: 1));
+    DateTime end = start.add(Duration(days: 1));
 
     List<Expense> list = await DbProvider().getExpenseInPeriod(
         category, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch);
@@ -127,13 +127,13 @@ class Log {
       BuildContext context, String category, DateTime date) async {
     final _dialog = new EditCostDialog(category);
     final result = await _dialog.displayDialog(context);
-    final _now = DateTime.now().millisecondsSinceEpoch;
+    int _nowFromEpoch = DateTime.now().millisecondsSinceEpoch;
 
     if (result != null && result.toString().isNotEmpty) {
       switch (category) {
         case 'food':
           var tmp = new Food(
-              id: _now,
+              id: _nowFromEpoch,
               category: 'food',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
@@ -141,7 +141,7 @@ class Log {
           break;
         case 'dailyuse':
           var tmp = new DailyUse(
-              id: _now,
+              id: _nowFromEpoch,
               category: 'dailyuse',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
@@ -149,7 +149,7 @@ class Log {
           break;
         case 'healthcare':
           var tmp = new HealthCare(
-              id: _now,
+              id: _nowFromEpoch,
               category: 'healthcare',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
@@ -157,7 +157,7 @@ class Log {
           break;
         case 'luxury':
           var tmp = new Luxury(
-              id: _now,
+              id: _nowFromEpoch,
               category: 'luxury',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));

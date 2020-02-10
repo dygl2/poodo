@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
@@ -34,6 +35,7 @@ class _LogPageState extends State<LogPage> {
 
   Future<void> _init() async {
     await DbProvider().database;
+    initializeDateFormatting('ja');
 
     _listFood = await Log.getLogAtDay('food', _date);
     _listDailyuse = await Log.getLogAtDay('dailyuse', _date);
@@ -71,7 +73,7 @@ class _LogPageState extends State<LogPage> {
               icon: Icon(Icons.keyboard_arrow_left),
               onPressed: () async {
                 setState(() {
-                  _date = _date.subtract(new Duration(days: 1));
+                  _date = _date.subtract(Duration(days: 1));
                 });
                 await _init();
               },
@@ -80,7 +82,7 @@ class _LogPageState extends State<LogPage> {
               icon: Icon(Icons.keyboard_arrow_right),
               onPressed: () async {
                 setState(() {
-                  _date = _date.add(new Duration(days: 1));
+                  _date = _date.add(Duration(days: 1));
                 });
                 await _init();
               },
