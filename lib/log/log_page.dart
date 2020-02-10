@@ -7,6 +7,7 @@ import 'package:poodo/log/aggregate_category_page.dart';
 import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
+import 'package:poodo/log/log_category.dart';
 import 'package:poodo/log/condition_log.dart';
 
 class LogPage extends StatefulWidget {
@@ -34,13 +35,13 @@ class _LogPageState extends State<LogPage> {
   _LogPageState(this._date);
 
   Future<void> _init() async {
-    await DbProvider().database;
     initializeDateFormatting('ja');
+    await DbProvider().database;
 
-    _listFood = await Log.getLogAtDay('food', _date);
-    _listDailyuse = await Log.getLogAtDay('dailyuse', _date);
-    _listHealthcare = await Log.getLogAtDay('healthcare', _date);
-    _listLuxury = await Log.getLogAtDay('luxury', _date);
+    _listFood = await Log.getLogAtDay(LogCategory.food, _date);
+    _listDailyuse = await Log.getLogAtDay(LogCategory.dailyuse, _date);
+    _listHealthcare = await Log.getLogAtDay(LogCategory.healthcare, _date);
+    _listLuxury = await Log.getLogAtDay(LogCategory.luxury, _date);
 
     aggregate = await Log.getAggregate(_date);
 
@@ -146,10 +147,10 @@ class _LogPageState extends State<LogPage> {
               child: Container(
                 child: Row(
                   children: <Widget>[
-                    _setFlatButton(context, 'food', _date),
-                    _setFlatButton(context, 'dailyuse', _date),
-                    _setFlatButton(context, 'healthcare', _date),
-                    _setFlatButton(context, 'luxury', _date),
+                    _setFlatButton(context, LogCategory.food, _date),
+                    _setFlatButton(context, LogCategory.dailyuse, _date),
+                    _setFlatButton(context, LogCategory.healthcare, _date),
+                    _setFlatButton(context, LogCategory.luxury, _date),
                   ],
                 ),
               ),
@@ -161,16 +162,18 @@ class _LogPageState extends State<LogPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: _expenseItemList('food', _listFood),
+                      child: _expenseItemList(LogCategory.food, _listFood),
                     ),
                     Expanded(
-                      child: _expenseItemList('dailyuse', _listDailyuse),
+                      child:
+                          _expenseItemList(LogCategory.dailyuse, _listDailyuse),
                     ),
                     Expanded(
-                      child: _expenseItemList('healthcare', _listHealthcare),
+                      child: _expenseItemList(
+                          LogCategory.healthcare, _listHealthcare),
                     ),
                     Expanded(
-                      child: _expenseItemList('luxury', _listLuxury),
+                      child: _expenseItemList(LogCategory.luxury, _listLuxury),
                     ),
                   ],
                 ),
@@ -292,11 +295,12 @@ class _LogPageState extends State<LogPage> {
     }
   }
 
-  Widget _setFlatButton(BuildContext context, String category, DateTime date) {
+  Widget _setFlatButton(
+      BuildContext context, LogCategory category, DateTime date) {
     return Expanded(
       child: RaisedButton(
         color: Colors.yellow[200],
-        child: Text(category),
+        child: Text(category.toString().split('.')[1]),
         onPressed: () async {
           await Log.addLog(context, category, date);
           await _init();
@@ -306,7 +310,7 @@ class _LogPageState extends State<LogPage> {
     );
   }
 
-  Widget _expenseItemList(String category, List<Expense> list) {
+  Widget _expenseItemList(LogCategory category, List<Expense> list) {
     return Container(
       child: ListView.builder(
         itemCount: list.length,

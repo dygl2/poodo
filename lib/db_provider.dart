@@ -1,4 +1,5 @@
 import 'package:poodo/log/condition_log.dart';
+import 'package:poodo/log/log_category.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -19,7 +20,7 @@ class DbProvider {
   static Database _db;
   static DbProvider _cache = DbProvider._internal();
   String path = "";
-  DateFormat _format = DateFormat('yyyy-MM-dd');
+  DateFormat _format = DateFormat('yyyy-MM-dd', 'ja');
 
   factory DbProvider() {
     return _cache;
@@ -64,14 +65,14 @@ class DbProvider {
               CREATE TABLE category
                 (
                   id INTEGER PRIMARY KEY,
-                  category TEXT
+                  category INTEGER
                 )
               """);
           newDb.execute("""
               CREATE TABLE food
                 (
                   id INTEGER PRIMARY KEY,
-                  category TEXT,
+                  category INTEGER,
                   date INTEGER,
                   cost INTEGER,
                   FOREIGN KEY (category) REFERENCES category(id) 
@@ -81,7 +82,7 @@ class DbProvider {
               CREATE TABLE dailyuse
                 (
                   id INTEGER PRIMARY KEY,
-                  category TEXT,
+                  category INTEGER,
                   date INTEGER,
                   cost INTEGER,
                   FOREIGN KEY (category) REFERENCES category(id) 
@@ -91,7 +92,7 @@ class DbProvider {
               CREATE TABLE healthcare
                 (
                   id INTEGER PRIMARY KEY,
-                  category TEXT,
+                  category INTEGER,
                   date INTEGER,
                   cost INTEGER,
                   FOREIGN KEY (category) REFERENCES category(id) 
@@ -101,7 +102,7 @@ class DbProvider {
               CREATE TABLE luxury
                 (
                   id INTEGER PRIMARY KEY,
-                  category TEXT,
+                  category INTEGER,
                   date INTEGER,
                   cost INTEGER,
                   FOREIGN KEY (category) REFERENCES category(id) 
@@ -206,30 +207,31 @@ class DbProvider {
     });
   }
 
-  Future<List<Expense>> getExpenseAll(String category) async {
-    List<Map<String, dynamic>> maps = await _db.query(category);
+  Future<List<Expense>> getExpenseAll(LogCategory category) async {
+    List<Map<String, dynamic>> maps =
+        await _db.query(category.toString().split('.')[1]);
     if (maps != null) {
       return List.generate(maps.length, (i) {
-        switch (category) {
-          case 'food':
+        switch (LogCategory.values[category.index]) {
+          case LogCategory.food:
             return Food(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'dailyuse':
+          case LogCategory.dailyuse:
             return DailyUse(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'healthcare':
+          case LogCategory.healthcare:
             return HealthCare(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'luxury':
+          case LogCategory.luxury:
             return Luxury(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
@@ -240,66 +242,33 @@ class DbProvider {
     }
   }
 
-  Future<List<Expense>> getExpense(String category, int index) async {
-    List<Map<String, dynamic>> maps =
-        await _db.query(category, where: 'id = ?', whereArgs: [index]);
+  Future<List<Expense>> getExpense(LogCategory category, int index) async {
+    List<Map<String, dynamic>> maps = await _db.query(
+        category.toString().split('.')[1],
+        where: 'id = ?',
+        whereArgs: [index]);
     if (maps != null) {
       return List.generate(maps.length, (i) {
-        switch (category) {
-          case 'food':
+        switch (LogCategory.values[category.index]) {
+          case LogCategory.food:
             return Food(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'dailyuse':
+          case LogCategory.dailyuse:
             return DailyUse(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'healthcare':
+          case LogCategory.healthcare:
             return HealthCare(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'luxury':
-            return Luxury(
-                id: maps[i]['id'],
-                category: maps[i]['category'],
-                date: maps[i]['date'],
-                cost: maps[i]['cost']);
-        }
-      });
-    }
-  }
-
-  Future<List<Expense>> getExpenseAtDay(String category, int day) async {
-    List<Map<String, dynamic>> maps =
-        await _db.query(category, where: 'date = ?', whereArgs: [day]);
-    if (maps != null) {
-      return List.generate(maps.length, (i) {
-        switch (category) {
-          case 'food':
-            return Food(
-                id: maps[i]['id'],
-                category: maps[i]['category'],
-                date: maps[i]['date'],
-                cost: maps[i]['cost']);
-          case 'dailyuse':
-            return DailyUse(
-                id: maps[i]['id'],
-                category: maps[i]['category'],
-                date: maps[i]['date'],
-                cost: maps[i]['cost']);
-          case 'healthcare':
-            return HealthCare(
-                id: maps[i]['id'],
-                category: maps[i]['category'],
-                date: maps[i]['date'],
-                cost: maps[i]['cost']);
-          case 'luxury':
+          case LogCategory.luxury:
             return Luxury(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
@@ -311,35 +280,35 @@ class DbProvider {
   }
 
   Future<List<Expense>> getExpenseInPeriod(
-      String category, int start, int end) async {
+      LogCategory category, int start, int end) async {
     List<Map<String, dynamic>> maps = await _db.rawQuery("select * from " +
-        category +
+        category.toString().split('.')[1] +
         " where date>=" +
         start.toString() +
         " and date<" +
         end.toString());
     if (maps != null) {
       return List.generate(maps.length, (i) {
-        switch (category) {
-          case 'food':
+        switch (LogCategory.values[category.index]) {
+          case LogCategory.food:
             return Food(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'dailyuse':
+          case LogCategory.dailyuse:
             return DailyUse(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'healthcare':
+          case LogCategory.healthcare:
             return HealthCare(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
                 cost: maps[i]['cost']);
-          case 'luxury':
+          case LogCategory.luxury:
             return Luxury(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
