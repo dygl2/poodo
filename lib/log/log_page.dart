@@ -32,7 +32,7 @@ class _LogPageState extends State<LogPage> {
 
   _LogPageState(this._date);
 
-  void _init() async {
+  Future<void> _init() async {
     await DbProvider().database;
 
     _listFood = await Log.getLogAtDay('food', _date);
@@ -69,27 +69,27 @@ class _LogPageState extends State<LogPage> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.keyboard_arrow_left),
-              onPressed: () {
-                _date = _date.subtract(new Duration(days: 1));
+              onPressed: () async {
                 setState(() {
-                  _init();
+                  _date = _date.subtract(new Duration(days: 1));
                 });
+                await _init();
               },
             ),
             IconButton(
               icon: Icon(Icons.keyboard_arrow_right),
-              onPressed: () {
-                _date = _date.add(new Duration(days: 1));
+              onPressed: () async {
                 setState(() {
-                  _init();
+                  _date = _date.add(new Duration(days: 1));
                 });
+                await _init();
               },
             ),
             IconButton(
               icon: Icon(Icons.date_range),
               onPressed: () async {
                 await _setDate(context);
-                _init();
+                await _init();
               },
             ),
           ],
