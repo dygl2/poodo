@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
@@ -7,7 +8,6 @@ import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
 import 'package:poodo/log/condition_log.dart';
-import 'package:poodo/log/aggregate_category_page.dart';
 
 class LogPage extends StatefulWidget {
   final DateTime _date;
@@ -33,8 +33,9 @@ class _LogPageState extends State<LogPage> {
 
   _LogPageState(this._date);
 
-  void _init() async {
+  Future<void> _init() async {
     await DbProvider().database;
+    initializeDateFormatting('ja');
 
     _listFood = await Log.getLogAtDay('food', _date);
     _listDailyuse = await Log.getLogAtDay('dailyuse', _date);
@@ -70,27 +71,27 @@ class _LogPageState extends State<LogPage> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.keyboard_arrow_left),
-              onPressed: () {
-                _date = _date.subtract(new Duration(days: 1));
+              onPressed: () async {
                 setState(() {
-                  _init();
+                  _date = _date.subtract(Duration(days: 1));
                 });
+                await _init();
               },
             ),
             IconButton(
               icon: Icon(Icons.keyboard_arrow_right),
-              onPressed: () {
-                _date = _date.add(new Duration(days: 1));
+              onPressed: () async {
                 setState(() {
-                  _init();
+                  _date = _date.add(Duration(days: 1));
                 });
+                await _init();
               },
             ),
             IconButton(
               icon: Icon(Icons.date_range),
               onPressed: () async {
                 await _setDate(context);
-                _init();
+                await _init();
               },
             ),
           ],
@@ -115,8 +116,8 @@ class _LogPageState extends State<LogPage> {
                       flex: 1,
                       child: IconButton(
                         icon: Icon(Icons.info),
-                        onPressed: () {
-                          _init();
+                        onPressed: () async {
+                          await _init();
                           //AggregateDialog.displayDialog(context, aggregate);
                           Navigator.of(context).push(
                             MaterialPageRoute<void>(
@@ -298,7 +299,7 @@ class _LogPageState extends State<LogPage> {
         child: Text(category),
         onPressed: () async {
           await Log.addLog(context, category, date);
-          _init();
+          await _init();
         },
         shape: UnderlineInputBorder(),
       ),
@@ -326,12 +327,12 @@ class _LogPageState extends State<LogPage> {
                   ],
                 ),
                 onTap: () async {
-                  await Log.updateLog(context, category, list[index].id, _date);
-                  _init();
+                  await Log.updateLog(context, category, list[index].id);
+                  await _init();
                 },
                 onLongPress: () async {
                   await Log.deleteLog(context, category, list, index);
-                  _init();
+                  await _init();
                 }),
           );
         },

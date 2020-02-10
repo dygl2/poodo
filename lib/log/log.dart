@@ -12,12 +12,12 @@ import 'package:poodo/log/healthcare.dart';
 import 'package:poodo/log/luxury.dart';
 
 class Log {
-  static DateFormat _format = DateFormat('yyyy-MM-dd');
+  static DateFormat _format = DateFormat('yyyy-MM-dd', 'ja');
 
   static Future<List<Expense>> getLogAtDay(
       String category, DateTime date) async {
     DateTime start = DateTime.parse(_format.format(date));
-    DateTime end = start.add(new Duration(days: 1));
+    DateTime end = start.add(Duration(days: 1));
 
     List<Expense> list = await DbProvider().getExpenseInPeriod(
         category, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch);
@@ -127,12 +127,13 @@ class Log {
       BuildContext context, String category, DateTime date) async {
     final _dialog = new EditCostDialog(category);
     final result = await _dialog.displayDialog(context);
+    int _nowFromEpoch = DateTime.now().millisecondsSinceEpoch;
 
     if (result != null && result.toString().isNotEmpty) {
       switch (category) {
         case 'food':
           var tmp = new Food(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: _nowFromEpoch,
               category: 'food',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
@@ -140,7 +141,7 @@ class Log {
           break;
         case 'dailyuse':
           var tmp = new DailyUse(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: _nowFromEpoch,
               category: 'dailyuse',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
@@ -148,7 +149,7 @@ class Log {
           break;
         case 'healthcare':
           var tmp = new HealthCare(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: _nowFromEpoch,
               category: 'healthcare',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
@@ -156,7 +157,7 @@ class Log {
           break;
         case 'luxury':
           var tmp = new Luxury(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: _nowFromEpoch,
               category: 'luxury',
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
@@ -167,41 +168,43 @@ class Log {
   }
 
   static Future<void> updateLog(
-      BuildContext context, String category, int index, DateTime date) async {
+      BuildContext context, String category, int index) async {
     final _dialog = new EditCostDialog(category);
     final result = await _dialog.displayDialog(context);
 
     if (result.toString().isNotEmpty) {
+      List<Expense> org = await DbProvider().getExpense(category, index);
+
       switch (category) {
         case 'food':
           var tmp = new Food(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: org[0].id,
               category: 'food',
-              date: date.millisecondsSinceEpoch,
+              date: org[0].date,
               cost: int.parse(result));
           DbProvider().update(category, tmp, index);
           break;
         case 'dailyuse':
           var tmp = new DailyUse(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: org[0].id,
               category: 'dailyuse',
-              date: date.millisecondsSinceEpoch,
+              date: org[0].date,
               cost: int.parse(result));
           DbProvider().update(category, tmp, index);
           break;
         case 'healthcare':
           var tmp = new HealthCare(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: org[0].id,
               category: 'healthcare',
-              date: date.millisecondsSinceEpoch,
+              date: org[0].date,
               cost: int.parse(result));
           DbProvider().update(category, tmp, index);
           break;
         case 'luxury':
           var tmp = new Luxury(
-              id: DateTime.now().millisecondsSinceEpoch,
+              id: org[0].id,
               category: 'luxury',
-              date: date.millisecondsSinceEpoch,
+              date: org[0].date,
               cost: int.parse(result));
           DbProvider().update(category, tmp, index);
           break;

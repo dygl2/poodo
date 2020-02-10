@@ -314,11 +314,10 @@ class DbProvider {
       String category, int start, int end) async {
     List<Map<String, dynamic>> maps = await _db.rawQuery("select * from " +
         category +
-        " where date between '" +
+        " where date>=" +
         start.toString() +
-        "' and '" +
-        end.toString() +
-        "'");
+        " and date<" +
+        end.toString());
     if (maps != null) {
       return List.generate(maps.length, (i) {
         switch (category) {
