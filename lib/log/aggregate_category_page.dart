@@ -106,8 +106,13 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
   static var yearlyChart = new charts.PieChart(
     yearlySeries,
     animate: true,
+    behaviors: [new charts.SeriesLegend()],
     defaultRenderer: new charts.ArcRendererConfig(
-        arcWidth: 60, arcRendererDecorators: [new charts.ArcLabelDecorator()]),
+        arcWidth: 60,
+        arcRendererDecorators: [
+          new charts.ArcLabelDecorator(
+              labelPosition: charts.ArcLabelPosition.inside)
+        ]),
   );
 
   @override
