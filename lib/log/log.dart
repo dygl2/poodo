@@ -6,6 +6,7 @@ import 'package:poodo/log/confirm_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/edit_cost_dialog.dart';
+import 'package:poodo/log/log_category.dart';
 import 'package:poodo/log/food.dart';
 import 'package:poodo/log/dailyuse.dart';
 import 'package:poodo/log/healthcare.dart';
@@ -15,7 +16,7 @@ class Log {
   static DateFormat _format = DateFormat('yyyy-MM-dd', 'ja');
 
   static Future<List<Expense>> getLogAtDay(
-      String category, DateTime date) async {
+      LogCategory category, DateTime date) async {
     DateTime start = DateTime.parse(_format.format(date));
     DateTime end = start.add(Duration(days: 1));
 
@@ -27,11 +28,14 @@ class Log {
 
   static Future<Aggregate> getAggregate(DateTime targetDate) async {
     Aggregate result = new Aggregate(targetDate);
-    List<Expense> _listFood = await DbProvider().getExpenseAll('food');
-    List<Expense> _listDailyuse = await DbProvider().getExpenseAll('dailyuse');
+    List<Expense> _listFood =
+        await DbProvider().getExpenseAll(LogCategory.food);
+    List<Expense> _listDailyuse =
+        await DbProvider().getExpenseAll(LogCategory.dailyuse);
     List<Expense> _listHealthcare =
-        await DbProvider().getExpenseAll('healthcare');
-    List<Expense> _listLuxury = await DbProvider().getExpenseAll('luxury');
+        await DbProvider().getExpenseAll(LogCategory.healthcare);
+    List<Expense> _listLuxury =
+        await DbProvider().getExpenseAll(LogCategory.luxury);
 
     List<List<Expense>> _lists = [];
     _lists.add(_listFood);
@@ -46,17 +50,17 @@ class Log {
           result.yearlyTotal += item.cost;
 
           // calculate yearly category aggregation
-          switch (item.category) {
-            case 'food':
+          switch (LogCategory.values[item.category]) {
+            case LogCategory.food:
               result.listCategoryYearlyTotal[0] += item.cost;
               break;
-            case 'dailyuse':
+            case LogCategory.dailyuse:
               result.listCategoryYearlyTotal[1] += item.cost;
               break;
-            case 'healthcare':
+            case LogCategory.healthcare:
               result.listCategoryYearlyTotal[2] += item.cost;
               break;
-            case 'luxury':
+            case LogCategory.luxury:
               result.listCategoryYearlyTotal[3] += item.cost;
               break;
           }
@@ -66,17 +70,17 @@ class Log {
             result.mothlyTotal += item.cost;
 
             // calculate monthly category aggregation
-            switch (item.category) {
-              case 'food':
+            switch (LogCategory.values[item.category]) {
+              case LogCategory.food:
                 result.listCateogryMonthlyTotal[0] += item.cost;
                 break;
-              case 'dailyuse':
+              case LogCategory.dailyuse:
                 result.listCateogryMonthlyTotal[1] += item.cost;
                 break;
-              case 'healthcare':
+              case LogCategory.healthcare:
                 result.listCateogryMonthlyTotal[2] += item.cost;
                 break;
-              case 'luxury':
+              case LogCategory.luxury:
                 result.listCateogryMonthlyTotal[3] += item.cost;
                 break;
             }
@@ -124,100 +128,100 @@ class Log {
   }
 
   static Future<void> addLog(
-      BuildContext context, String category, DateTime date) async {
-    final _dialog = new EditCostDialog(category);
+      BuildContext context, LogCategory category, DateTime date) async {
+    final _dialog = new EditCostDialog(category.toString().split('.')[1]);
     final result = await _dialog.displayDialog(context);
     int _nowFromEpoch = DateTime.now().millisecondsSinceEpoch;
 
     if (result != null && result.toString().isNotEmpty) {
-      switch (category) {
-        case 'food':
-          var tmp = new Food(
+      var tmp;
+
+      switch (LogCategory.values[category.index]) {
+        case LogCategory.food:
+          tmp = new Food(
               id: _nowFromEpoch,
-              category: 'food',
+              category: category.index,
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
-          DbProvider().insert(category, tmp);
           break;
-        case 'dailyuse':
-          var tmp = new DailyUse(
+        case LogCategory.dailyuse:
+          tmp = new DailyUse(
               id: _nowFromEpoch,
-              category: 'dailyuse',
+              category: category.index,
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
-          DbProvider().insert(category, tmp);
           break;
-        case 'healthcare':
-          var tmp = new HealthCare(
+        case LogCategory.healthcare:
+          tmp = new HealthCare(
               id: _nowFromEpoch,
-              category: 'healthcare',
+              category: category.index,
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
-          DbProvider().insert(category, tmp);
           break;
-        case 'luxury':
-          var tmp = new Luxury(
+        case LogCategory.luxury:
+          tmp = new Luxury(
               id: _nowFromEpoch,
-              category: 'luxury',
+              category: category.index,
               date: date.millisecondsSinceEpoch,
               cost: int.parse(result));
-          DbProvider().insert(category, tmp);
           break;
       }
+
+      DbProvider().insert(category.toString().split('.')[1], tmp);
     }
   }
 
   static Future<void> updateLog(
-      BuildContext context, String category, int index) async {
-    final _dialog = new EditCostDialog(category);
+      BuildContext context, LogCategory category, int index) async {
+    final _dialog = new EditCostDialog(category.toString().split('.')[1]);
     final result = await _dialog.displayDialog(context);
 
     if (result.toString().isNotEmpty) {
       List<Expense> org = await DbProvider().getExpense(category, index);
+      var tmp;
 
-      switch (category) {
-        case 'food':
-          var tmp = new Food(
+      switch (LogCategory.values[category.index]) {
+        case LogCategory.food:
+          tmp = new Food(
               id: org[0].id,
-              category: 'food',
+              category: category.index,
               date: org[0].date,
               cost: int.parse(result));
-          DbProvider().update(category, tmp, index);
           break;
-        case 'dailyuse':
-          var tmp = new DailyUse(
+        case LogCategory.dailyuse:
+          tmp = new DailyUse(
               id: org[0].id,
-              category: 'dailyuse',
+              category: category.index,
               date: org[0].date,
               cost: int.parse(result));
-          DbProvider().update(category, tmp, index);
           break;
-        case 'healthcare':
-          var tmp = new HealthCare(
+        case LogCategory.healthcare:
+          tmp = new HealthCare(
               id: org[0].id,
-              category: 'healthcare',
+              category: category.index,
               date: org[0].date,
               cost: int.parse(result));
-          DbProvider().update(category, tmp, index);
           break;
-        case 'luxury':
-          var tmp = new Luxury(
+        case LogCategory.luxury:
+          tmp = new Luxury(
               id: org[0].id,
-              category: 'luxury',
+              category: category.index,
               date: org[0].date,
               cost: int.parse(result));
-          DbProvider().update(category, tmp, index);
           break;
       }
+
+      DbProvider().update(category.toString().split('.')[1], tmp, index);
     }
   }
 
-  static Future<void> deleteLog(BuildContext context, String category,
+  static Future<void> deleteLog(BuildContext context, LogCategory category,
       List<Expense> list, int index) async {
     final result = await ConfirmDialog.displayDialog(context);
 
     if (result == true) {
-      await DbProvider().delete(category, list[index].id);
+      await DbProvider()
+          .delete(category.toString().split('.')[1], list[index].id);
     }
   }
 

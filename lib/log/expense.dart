@@ -2,7 +2,7 @@ import 'package:poodo/data.dart';
 
 abstract class Expense extends Data {
   int id;
-  String category;
+  int category;
   int date;
   int cost;
 
