@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
-import 'package:poodo/log/aggregate_dialog.dart';
+import 'package:poodo/log/aggregate_category_page.dart';
 import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
 import 'package:poodo/log/condition_log.dart';
+import 'package:poodo/log/aggregate_category_page.dart';
 
 class LogPage extends StatefulWidget {
   final DateTime _date;
@@ -116,7 +117,13 @@ class _LogPageState extends State<LogPage> {
                         icon: Icon(Icons.info),
                         onPressed: () {
                           _init();
-                          AggregateDialog.displayDialog(context, aggregate);
+                          //AggregateDialog.displayDialog(context, aggregate);
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                              return AggreagateCategoryPage(aggregate);
+                            }),
+                          );
                         },
                       ),
                     ),
