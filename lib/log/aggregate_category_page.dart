@@ -78,7 +78,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
           monthlyCategory.percentage,
       colorFn: (MonthlyCategory monthlyCategory, _) => monthlyCategory.color,
       labelAccessorFn: (MonthlyCategory row, _) =>
-          '${row.category.toString().split('.')[1]}: ${row.cost}',
+          '${row.category.toString().split('.')[1]}:\n${row.cost} (${row.percentage}%)',
       data: _monthlyCategory,
     ),
   ];
@@ -98,7 +98,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
           yearlyCategory.percentage,
       colorFn: (YearlyCategory yearlyCategory, _) => yearlyCategory.color,
       labelAccessorFn: (YearlyCategory row, _) =>
-          '${row.category.toString().split('.')[1]}: ${row.cost}',
+          '${row.category.toString().split('.')[1]}:\n${row.cost} (${row.percentage}%)',
       data: _yearlyCategory,
     ),
   ];
