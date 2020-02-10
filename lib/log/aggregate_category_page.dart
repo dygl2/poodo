@@ -71,7 +71,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
 
   static var monthlySeries = [
     new charts.Series(
-      id: 'category',
+      id: 'monthly_category',
       domainFn: (MonthlyCategory monthlyCategory, _) =>
           monthlyCategory.category,
       measureFn: (MonthlyCategory monthlyCategory, _) =>
@@ -92,15 +92,14 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
 
   static var yearlySeries = [
     new charts.Series(
-      id: 'category',
-      domainFn: (MonthlyCategory monthlyCategory, _) =>
-          monthlyCategory.category,
-      measureFn: (MonthlyCategory monthlyCategory, _) =>
-          monthlyCategory.percentage,
-      colorFn: (MonthlyCategory monthlyCategory, _) => monthlyCategory.color,
-      labelAccessorFn: (MonthlyCategory row, _) =>
+      id: 'yearly_category',
+      domainFn: (YearlyCategory yearlyCategory, _) => yearlyCategory.category,
+      measureFn: (YearlyCategory yearlyCategory, _) =>
+          yearlyCategory.percentage,
+      colorFn: (YearlyCategory yearlyCategory, _) => yearlyCategory.color,
+      labelAccessorFn: (YearlyCategory row, _) =>
           '${row.category.toString().split('.')[1]}: ${row.cost}',
-      data: _monthlyCategory,
+      data: _yearlyCategory,
     ),
   ];
 
