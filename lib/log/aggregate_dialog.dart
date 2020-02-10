@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:poodo/log/aggregate.dart';
+import 'package:poodo/log/monthly_cost.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class AggregateDialog extends StatelessWidget {
   static String _title = 'Aggregate';
+  static List<List<MonthlyCost>> _monthlyCost = List.generate(
+      10,
+      (_) => new List.generate(12,
+          (i) => (new MonthlyCost((i + 1).toString(), 0, charts.Color.black))));
+
+  static var series = [
+    new charts.Series(
+      id: 'month',
+      domainFn: (MonthlyCost monthlyCost, _) => monthlyCost.month,
+      measureFn: (MonthlyCost monthlyCost, _) => monthlyCost.cost,
+      colorFn: (MonthlyCost monthlyCost, _) => monthlyCost.color,
+      data: _monthlyCost[0],
+    ),
+  ];
+
+  static var chart = new charts.BarChart(
+    series,
+    animate: true,
+  );
 
   static displayDialog(BuildContext context, Aggregate aggregate) async {
     return showDialog(
@@ -48,6 +69,7 @@ class AggregateDialog extends StatelessWidget {
                   style: TextStyle(fontSize: 24.0),
                   textAlign: TextAlign.end,
                 ),
+                SizedBox(child: chart, height: 200.0),
               ],
             ),
             actions: <Widget>[

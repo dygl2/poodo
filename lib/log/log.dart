@@ -44,9 +44,43 @@ class Log {
         if (DateTime.fromMillisecondsSinceEpoch(item.date).year ==
             targetDate.year) {
           result.yearlyTotal += item.cost;
+
+          // calculate yearly category aggregation
+          switch (item.category) {
+            case 'food':
+              result.listCategoryYearlyTotal[0] += item.cost;
+              break;
+            case 'dailyuse':
+              result.listCategoryYearlyTotal[1] += item.cost;
+              break;
+            case 'healthcare':
+              result.listCategoryYearlyTotal[2] += item.cost;
+              break;
+            case 'luxury':
+              result.listCategoryYearlyTotal[3] += item.cost;
+              break;
+          }
+
           if (DateTime.fromMillisecondsSinceEpoch(item.date).month ==
               targetDate.month) {
             result.mothlyTotal += item.cost;
+
+            // calculate monthly category aggregation
+            switch (item.category) {
+              case 'food':
+                result.listCateogryMonthlyTotal[0] += item.cost;
+                break;
+              case 'dailyuse':
+                result.listCateogryMonthlyTotal[1] += item.cost;
+                break;
+              case 'healthcare':
+                result.listCateogryMonthlyTotal[2] += item.cost;
+                break;
+              case 'luxury':
+                result.listCateogryMonthlyTotal[3] += item.cost;
+                break;
+            }
+
             if (DateTime.fromMillisecondsSinceEpoch(item.date).day ==
                 targetDate.day) {
               result.dayTotal += item.cost;

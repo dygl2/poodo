@@ -1,4 +1,4 @@
-enum Category {
+enum LogCategory {
   food,
   dailyuse,
   healthcare,

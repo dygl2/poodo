@@ -4,6 +4,8 @@ class Aggregate {
   int yearlyTotal = 0;
   int mothlyTotal = 0;
   int weeklyTotal = 0;
+  List<int> listCateogryMonthlyTotal = []..length = 4;
+  List<int> listCategoryYearlyTotal = []..length = 4;
 
   Aggregate(DateTime date) {
     targetDate = date;
@@ -11,5 +13,7 @@ class Aggregate {
     yearlyTotal = 0;
     mothlyTotal = 0;
     weeklyTotal = 0;
+    listCateogryMonthlyTotal = [0, 0, 0, 0];
+    listCategoryYearlyTotal = [0, 0, 0, 0];
   }
 }
