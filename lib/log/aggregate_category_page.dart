@@ -89,12 +89,10 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
     behaviors: [
       new charts.DatumLegend(position: charts.BehaviorPosition.bottom)
     ],
-    defaultRenderer: new charts.ArcRendererConfig(
-        //arcWidth: 60,
-        arcRendererDecorators: [
-          new charts.ArcLabelDecorator(
-              labelPosition: charts.ArcLabelPosition.auto)
-        ]),
+    defaultRenderer:
+        new charts.ArcRendererConfig(arcWidth: 50, arcRendererDecorators: [
+      new charts.ArcLabelDecorator(labelPosition: charts.ArcLabelPosition.auto)
+    ]),
   );
 
   static var yearlySeries = [
@@ -117,12 +115,10 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
     behaviors: [
       new charts.DatumLegend(position: charts.BehaviorPosition.bottom)
     ],
-    defaultRenderer: new charts.ArcRendererConfig(
-        //arcWidth: 60,
-        arcRendererDecorators: [
-          new charts.ArcLabelDecorator(
-              labelPosition: charts.ArcLabelPosition.auto)
-        ]),
+    defaultRenderer:
+        new charts.ArcRendererConfig(arcWidth: 50, arcRendererDecorators: [
+      new charts.ArcLabelDecorator(labelPosition: charts.ArcLabelPosition.auto)
+    ]),
   );
 
   @override

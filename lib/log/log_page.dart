@@ -50,6 +50,8 @@ class _LogPageState extends State<LogPage> {
     _noonCondition = await Log.getConditionLog(_date, ConditionCategory.NOON);
     _nightCondition = await Log.getConditionLog(_date, ConditionCategory.NIGHT);
 
+    _updateConditionRank();
+
     setState(() {});
   }
 
