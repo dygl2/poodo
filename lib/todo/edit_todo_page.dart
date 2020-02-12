@@ -62,10 +62,12 @@ class _EditTodoPageState extends State<EditTodoPage> {
                 Expanded(
                   //flex: 4,
                   child: TextField(
+                    autofocus: true,
                     controller: TextEditingController(text: _todo.content),
                     decoration: InputDecoration(
                       labelText: "things to do",
                     ),
+                    keyboardType: TextInputType.text,
                     maxLines: 2,
                     style: new TextStyle(color: Colors.black),
                     onChanged: (text) {

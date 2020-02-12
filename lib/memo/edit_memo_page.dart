@@ -29,10 +29,12 @@ class EditMemoPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: <Widget>[
             new TextField(
+              autofocus: true,
               controller: TextEditingController(text: _memo.title),
               decoration: InputDecoration(
                 labelText: "memo title",
               ),
+              keyboardType: TextInputType.text,
               maxLines: 2,
               style: new TextStyle(color: Colors.black),
               onChanged: (text) {

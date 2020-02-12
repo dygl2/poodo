@@ -67,7 +67,7 @@ class Log {
 
           if (DateTime.fromMillisecondsSinceEpoch(item.date).month ==
               targetDate.month) {
-            result.mothlyTotal += item.cost;
+            result.monthlyTotal += item.cost;
 
             // calculate monthly category aggregation
             switch (LogCategory.values[item.category]) {
