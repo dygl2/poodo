@@ -55,7 +55,7 @@ class AggregateDialog extends StatelessWidget {
                   textAlign: TextAlign.end,
                 ),
                 Text(
-                  aggregate.mothlyTotal.toString(),
+                  aggregate.monthlyTotal.toString(),
                   style: TextStyle(fontSize: 24.0),
                   textAlign: TextAlign.end,
                 ),

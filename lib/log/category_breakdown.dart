@@ -5,17 +5,17 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:poodo/log/monthly_category.dart';
 import 'package:poodo/log/yearly_category.dart';
 
-class AggreagateCategoryPage extends StatefulWidget {
+class CategoryBreakdownPage extends StatefulWidget {
   Aggregate _aggregate;
 
-  AggreagateCategoryPage(this._aggregate);
+  CategoryBreakdownPage(this._aggregate);
 
   @override
-  _AggregateCategoryPageState createState() =>
-      _AggregateCategoryPageState(this._aggregate);
+  _CategoryBreakdownPageState createState() =>
+      _CategoryBreakdownPageState(this._aggregate);
 }
 
-class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
+class _CategoryBreakdownPageState extends State<CategoryBreakdownPage> {
   Aggregate _aggregate;
   static List<MonthlyCategory> _monthlyCategory = [
     new MonthlyCategory(
@@ -39,7 +39,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
         charts.MaterialPalette.deepOrange.shadeDefault)
   ]..length = LogCategory.values.length;
 
-  _AggregateCategoryPageState(this._aggregate);
+  _CategoryBreakdownPageState(this._aggregate);
 
   void _init() async {
     setState(() {
@@ -47,7 +47,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
         _monthlyCategory[i].cost = _aggregate.listCateogryMonthlyTotal[i];
         _monthlyCategory[i].percentage =
             (_aggregate.listCateogryMonthlyTotal[i] /
-                _aggregate.mothlyTotal *
+                _aggregate.monthlyTotal *
                 100.0);
 
         _yearlyCategory[i].cost = _aggregate.listCategoryYearlyTotal[i];
@@ -71,7 +71,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
 
   static var monthlySeries = [
     new charts.Series(
-      id: 'monthly_category',
+      id: 'monthly_breakdown',
       domainFn: (MonthlyCategory monthlyCategory, _) =>
           monthlyCategory.category.toString().split('.')[1],
       measureFn: (MonthlyCategory monthlyCategory, _) =>
@@ -97,7 +97,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
 
   static var yearlySeries = [
     new charts.Series(
-      id: 'yearly_category',
+      id: 'yearly_breakdown',
       domainFn: (YearlyCategory yearlyCategory, _) =>
           yearlyCategory.category.toString().split('.')[1],
       measureFn: (YearlyCategory yearlyCategory, _) =>
@@ -125,7 +125,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Aggregate category'),
+        title: Text('Category breakdown'),
       ),
       body: Column(
         children: <Widget>[
@@ -137,7 +137,7 @@ class _AggregateCategoryPageState extends State<AggreagateCategoryPage> {
             textAlign: TextAlign.end,
           ),
           Text(
-            _aggregate.mothlyTotal.toString(),
+            _aggregate.monthlyTotal.toString(),
             style: TextStyle(fontSize: 24.0),
             textAlign: TextAlign.end,
           ),

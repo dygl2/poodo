@@ -3,7 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
-import 'package:poodo/log/aggregate_category_page.dart';
+import 'package:poodo/log/category_breakdown.dart';
 import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
@@ -21,7 +21,8 @@ class LogPage extends StatefulWidget {
 
 class _LogPageState extends State<LogPage> {
   DateTime _date;
-  DateFormat _format = DateFormat('yyyy/MM/dd(E)');
+  DateFormat _dateFormat = DateFormat('yyyy/MM/dd(E)');
+  NumberFormat _currencyFormat = NumberFormat("#,##0.0");
   List<Expense> _listFood = [];
   List<Expense> _listDailyuse = [];
   List<Expense> _listHealthcare = [];
@@ -70,7 +71,7 @@ class _LogPageState extends State<LogPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(_format.format(_date)),
+          title: Text(_dateFormat.format(_date)),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.keyboard_arrow_left),
@@ -125,7 +126,7 @@ class _LogPageState extends State<LogPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
-                              return AggreagateCategoryPage(aggregate);
+                              return CategoryBreakdownPage(aggregate);
                             }),
                           );
                         },
@@ -134,7 +135,9 @@ class _LogPageState extends State<LogPage> {
                     Expanded(
                       flex: 5,
                       child: Text(
-                        aggregate.dayTotal.toString(),
+                        _currencyFormat
+                            .parse(aggregate.dayTotal.toString())
+                            .toString(),
                         style: TextStyle(
                             fontSize: 32.0, fontStyle: FontStyle.italic),
                         textAlign: TextAlign.center,
