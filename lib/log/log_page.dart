@@ -3,7 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
-import 'package:poodo/log/category_breakdown.dart';
+import 'package:poodo/log/category_breakdown_page.dart';
 import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
@@ -21,8 +21,8 @@ class LogPage extends StatefulWidget {
 
 class _LogPageState extends State<LogPage> {
   DateTime _date;
-  DateFormat _dateFormat = DateFormat('yyyy/MM/dd(E)');
-  NumberFormat _currencyFormat = NumberFormat("#,##0.0");
+  static DateFormat _dateFormat = DateFormat('yyyy/MM/dd(E)');
+  NumberFormat _currencyFormat = NumberFormat("#,##0");
   List<Expense> _listFood = [];
   List<Expense> _listDailyuse = [];
   List<Expense> _listHealthcare = [];
@@ -135,9 +135,7 @@ class _LogPageState extends State<LogPage> {
                     Expanded(
                       flex: 5,
                       child: Text(
-                        _currencyFormat
-                            .parse(aggregate.dayTotal.toString())
-                            .toString(),
+                        _currencyFormat.format(aggregate.dayTotal).toString(),
                         style: TextStyle(
                             fontSize: 32.0, fontStyle: FontStyle.italic),
                         textAlign: TextAlign.center,
@@ -320,7 +318,7 @@ class _LogPageState extends State<LogPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
-                      list[index].cost.toString(),
+                      _currencyFormat.format(list[index].cost).toString(),
                       // highlight expired item
                       style: TextStyle(color: Colors.black, height: 0.0),
                     ),

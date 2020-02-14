@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:poodo/log/aggregate.dart';
 import 'package:poodo/log/log_category.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -17,6 +18,7 @@ class CategoryBreakdownPage extends StatefulWidget {
 
 class _CategoryBreakdownPageState extends State<CategoryBreakdownPage> {
   Aggregate _aggregate;
+  static NumberFormat _currencyFormat = NumberFormat("#,##0");
   static List<MonthlyCategory> _monthlyCategory = [
     new MonthlyCategory(
         LogCategory.food, 25.0, 0, charts.MaterialPalette.lime.shadeDefault),
@@ -78,7 +80,7 @@ class _CategoryBreakdownPageState extends State<CategoryBreakdownPage> {
           monthlyCategory.percentage,
       colorFn: (MonthlyCategory monthlyCategory, _) => monthlyCategory.color,
       labelAccessorFn: (MonthlyCategory row, _) =>
-          '${row.cost}\n(${double.parse(row.percentage.toStringAsFixed(1))}%)',
+          '${_currencyFormat.format(row.cost)}\n(${double.parse(row.percentage.toStringAsFixed(1))}%)',
       data: _monthlyCategory,
     ),
   ];
@@ -104,7 +106,7 @@ class _CategoryBreakdownPageState extends State<CategoryBreakdownPage> {
           yearlyCategory.percentage,
       colorFn: (YearlyCategory yearlyCategory, _) => yearlyCategory.color,
       labelAccessorFn: (YearlyCategory row, _) =>
-          '${row.cost}\n(${double.parse(row.percentage.toStringAsFixed(1))}%)',
+          '${_currencyFormat.format(row.cost)}\n(${double.parse(row.percentage.toStringAsFixed(1))}%)',
       data: _yearlyCategory,
     ),
   ];
@@ -137,7 +139,7 @@ class _CategoryBreakdownPageState extends State<CategoryBreakdownPage> {
             textAlign: TextAlign.end,
           ),
           Text(
-            _aggregate.monthlyTotal.toString(),
+            _currencyFormat.format(_aggregate.monthlyTotal).toString(),
             style: TextStyle(fontSize: 24.0),
             textAlign: TextAlign.end,
           ),
@@ -150,7 +152,7 @@ class _CategoryBreakdownPageState extends State<CategoryBreakdownPage> {
             textAlign: TextAlign.end,
           ),
           Text(
-            _aggregate.yearlyTotal.toString(),
+            _currencyFormat.format(_aggregate.yearlyTotal).toString(),
             style: TextStyle(fontSize: 24.0),
             textAlign: TextAlign.end,
           ),
