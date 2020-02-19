@@ -11,12 +11,8 @@ import 'package:poodo/log/log_category.dart';
 import 'package:poodo/log/condition_log.dart';
 
 class LogPage extends StatefulWidget {
-  final DateTime _date;
-
-  LogPage(this._date);
-
   @override
-  _LogPageState createState() => _LogPageState(_date);
+  _LogPageState createState() => _LogPageState();
 }
 
 class _LogPageState extends State<LogPage> {
@@ -33,10 +29,9 @@ class _LogPageState extends State<LogPage> {
   int _conditionRank = 70;
   Aggregate aggregate;
 
-  _LogPageState(this._date);
+  _LogPageState();
 
   Future<void> _init() async {
-    initializeDateFormatting('ja');
     await DbProvider().database;
 
     _listFood = await Log.getLogAtDay(LogCategory.food, _date);
@@ -58,6 +53,10 @@ class _LogPageState extends State<LogPage> {
 
   @override
   void initState() {
+    initializeDateFormatting('ja');
+
+    _date = DateTime.now();
+
     _init();
     super.initState();
   }
@@ -76,18 +75,14 @@ class _LogPageState extends State<LogPage> {
             IconButton(
               icon: Icon(Icons.keyboard_arrow_left),
               onPressed: () async {
-                setState(() {
-                  _date = _date.subtract(Duration(days: 1));
-                });
+                _date = _date.subtract(Duration(days: 1));
                 await _init();
               },
             ),
             IconButton(
               icon: Icon(Icons.keyboard_arrow_right),
               onPressed: () async {
-                setState(() {
-                  _date = _date.add(Duration(days: 1));
-                });
+                _date = _date.add(Duration(days: 1));
                 await _init();
               },
             ),
@@ -121,8 +116,6 @@ class _LogPageState extends State<LogPage> {
                       child: IconButton(
                         icon: Icon(Icons.info),
                         onPressed: () async {
-                          await _init();
-                          //AggregateDialog.displayDialog(context, aggregate);
                           Navigator.of(context).push(
                             MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
