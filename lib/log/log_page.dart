@@ -325,7 +325,8 @@ class _LogPageState extends State<LogPage> {
                   ],
                 ),
                 onTap: () async {
-                  await Log.updateLog(context, category, list[index].id);
+                  await Log.updateLog(context, category, list[index].cost,
+                      list[index].remarks, list[index].id);
                   await _init();
                 },
                 onLongPress: () async {
