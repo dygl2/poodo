@@ -5,8 +5,9 @@ abstract class Expense extends Data {
   int category;
   int date;
   int cost;
+  String remarks;
 
-  Expense(this.id, this.category, this.date, this.cost);
+  Expense(this.id, this.category, this.date, this.cost, this.remarks);
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,6 +15,7 @@ abstract class Expense extends Data {
       'category': category,
       'date': date,
       'cost': cost,
+      'remarks': remarks,
     };
   }
 }

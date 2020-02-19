@@ -129,7 +129,8 @@ class Log {
 
   static Future<void> addLog(
       BuildContext context, LogCategory category, DateTime date) async {
-    final _dialog = new EditCostDialog(category.toString().split('.')[1]);
+    final _dialog = new EditCostDialog(
+        category.toString().split('.')[1], CostRemarks(null, ""));
     final result = await _dialog.displayDialog(context);
     int _nowFromEpoch = DateTime.now().millisecondsSinceEpoch;
 
@@ -142,28 +143,32 @@ class Log {
               id: _nowFromEpoch,
               category: category.index,
               date: date.millisecondsSinceEpoch,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
         case LogCategory.dailyuse:
           tmp = new DailyUse(
               id: _nowFromEpoch,
               category: category.index,
               date: date.millisecondsSinceEpoch,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
         case LogCategory.healthcare:
           tmp = new HealthCare(
               id: _nowFromEpoch,
               category: category.index,
               date: date.millisecondsSinceEpoch,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
         case LogCategory.luxury:
           tmp = new Luxury(
               id: _nowFromEpoch,
               category: category.index,
               date: date.millisecondsSinceEpoch,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
       }
 
@@ -171,10 +176,11 @@ class Log {
     }
   }
 
-  static Future<void> updateLog(
-      BuildContext context, LogCategory category, int index) async {
-    final _dialog = new EditCostDialog(category.toString().split('.')[1]);
-    final result = await _dialog.displayDialog(context);
+  static Future<void> updateLog(BuildContext context, LogCategory category,
+      int cost, String remarks, int index) async {
+    final _dialog = new EditCostDialog(
+        category.toString().split('.')[1], CostRemarks(cost, remarks));
+    final CostRemarks result = await _dialog.displayDialog(context);
 
     if (result.toString().isNotEmpty) {
       List<Expense> org = await DbProvider().getExpense(category, index);
@@ -186,28 +192,32 @@ class Log {
               id: org[0].id,
               category: category.index,
               date: org[0].date,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
         case LogCategory.dailyuse:
           tmp = new DailyUse(
               id: org[0].id,
               category: category.index,
               date: org[0].date,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
         case LogCategory.healthcare:
           tmp = new HealthCare(
               id: org[0].id,
               category: category.index,
               date: org[0].date,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
         case LogCategory.luxury:
           tmp = new Luxury(
               id: org[0].id,
               category: category.index,
               date: org[0].date,
-              cost: int.parse(result));
+              cost: result.cost,
+              remarks: result.remarks);
           break;
       }
 

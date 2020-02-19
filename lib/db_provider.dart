@@ -75,6 +75,7 @@ class DbProvider {
                   category INTEGER,
                   date INTEGER,
                   cost INTEGER,
+                  remarks TEXT,
                   FOREIGN KEY (category) REFERENCES category(id) 
                 )
               """);
@@ -85,6 +86,7 @@ class DbProvider {
                   category INTEGER,
                   date INTEGER,
                   cost INTEGER,
+                  remarks TEXT,
                   FOREIGN KEY (category) REFERENCES category(id) 
                 )
               """);
@@ -95,6 +97,7 @@ class DbProvider {
                   category INTEGER,
                   date INTEGER,
                   cost INTEGER,
+                  remarks TEXT,
                   FOREIGN KEY (category) REFERENCES category(id) 
                 )
               """);
@@ -105,6 +108,7 @@ class DbProvider {
                   category INTEGER,
                   date INTEGER,
                   cost INTEGER,
+                  remarks TEXT,
                   FOREIGN KEY (category) REFERENCES category(id) 
                 )
               """);
@@ -218,25 +222,29 @@ class DbProvider {
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.dailyuse:
             return DailyUse(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.healthcare:
             return HealthCare(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.luxury:
             return Luxury(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
         }
       });
     }
@@ -255,25 +263,29 @@ class DbProvider {
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.dailyuse:
             return DailyUse(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.healthcare:
             return HealthCare(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.luxury:
             return Luxury(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
         }
       });
     }
@@ -295,25 +307,29 @@ class DbProvider {
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.dailyuse:
             return DailyUse(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.healthcare:
             return HealthCare(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
           case LogCategory.luxury:
             return Luxury(
                 id: maps[i]['id'],
                 category: maps[i]['category'],
                 date: maps[i]['date'],
-                cost: maps[i]['cost']);
+                cost: maps[i]['cost'],
+                remarks: maps[i]['remarks']);
         }
       });
     }
