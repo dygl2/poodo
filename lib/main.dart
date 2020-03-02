@@ -18,7 +18,7 @@ class TabInfo {
 
 class MainApp extends StatelessWidget {
   final List<TabInfo> _tabs = [
-    TabInfo("log", LogPage(DateTime.now())),
+    TabInfo("log", LogPage()),
     TabInfo("todo", TodoPage()),
     TabInfo("want", WantPage()),
     TabInfo("memo", MemoPage()),
