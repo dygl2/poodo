@@ -27,7 +27,7 @@ class _LogPageState extends State<LogPage> {
   List<ConditionLog> _noonCondition;
   List<ConditionLog> _nightCondition;
   int _conditionRank = 70;
-  Aggregate aggregate;
+  Aggregate _aggregate;
 
   _LogPageState();
 
@@ -39,7 +39,7 @@ class _LogPageState extends State<LogPage> {
     _listHealthcare = await Log.getLogAtDay(LogCategory.healthcare, _date);
     _listLuxury = await Log.getLogAtDay(LogCategory.luxury, _date);
 
-    aggregate = await Log.getAggregate(_date);
+    _aggregate = await Log.getAggregate(_date);
 
     _morningCondition =
         await Log.getConditionLog(_date, ConditionCategory.MORNING);
@@ -112,26 +112,26 @@ class _LogPageState extends State<LogPage> {
                       ),
                     ),
                     Expanded(
-                      flex: 1,
-                      child: IconButton(
-                        icon: Icon(Icons.info),
-                        onPressed: () async {
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                                builder: (BuildContext context) {
-                              return CategoryBreakdownPage(aggregate);
-                            }),
-                          );
-                        },
-                      ),
-                    ),
-                    Expanded(
                       flex: 5,
                       child: Text(
-                        _currencyFormat.format(aggregate.dayTotal).toString(),
+                        _currencyFormat.format(_aggregate.dayTotal).toString(),
                         style: TextStyle(
                             fontSize: 32.0, fontStyle: FontStyle.italic),
                         textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        icon: Icon(Icons.info),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                              return CategoryBreakdownPage(_aggregate);
+                            }),
+                          );
+                        },
                       ),
                     ),
                   ],
