@@ -35,8 +35,8 @@ class _TodoPageState extends State<TodoPage> {
     GoogleCalendar.CalendarApi.CalendarScope
   ]; //defines the scopes for the calendar api
 
-  Future<void> _getCalendarEvents(List<Todo> list) async {
-    await clientViaServiceAccount(accountCredentials, _scopes).then((client) {
+  void _getCalendarEvents(List<Todo> list) {
+    clientViaServiceAccount(accountCredentials, _scopes).then((client) {
       var calendar = new GoogleCalendar.CalendarApi(client);
       var calEvents = calendar.events.list("t0m013h@gmail.com");
       calEvents.then((GoogleCalendar.Events events) {
@@ -65,11 +65,9 @@ class _TodoPageState extends State<TodoPage> {
     list.sort((a, b) => a.date.compareTo(b.date));
   }
 
-  void _init() async {
-    _listTodo = await DbProvider().getTodoAll();
-
-    await _getCalendarEvents(_listTodo);
-
+  void _init() {
+    _listTodo = DbProvider().getTodoAll();
+    _getCalendarEvents(_listTodo);
     setState(() {});
   }
 
