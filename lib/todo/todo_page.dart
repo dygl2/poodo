@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/todo/edit_todo_page.dart';
 import 'package:poodo/todo/todo.dart';
+import 'package:poodo/log/log_page.dart';
 
 class TodoPage extends StatefulWidget {
   @override
@@ -16,7 +17,8 @@ class _TodoPageState extends State<TodoPage> {
 
   void _init() async {
     _listTodo = await DbProvider().getTodoAll();
-
+    _listTodo.addAll(listEvents);
+    _listTodo.sort((a, b) => a.date.compareTo(b.date));
     setState(() {});
   }
 
