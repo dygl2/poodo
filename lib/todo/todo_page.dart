@@ -14,6 +14,7 @@ class TodoPage extends StatefulWidget {
 class _TodoPageState extends State<TodoPage> {
   final String type = "todo";
   List<Todo> _listTodo = [];
+  List<Todo> _listEvents = [];
   int _index = 0;
 
   final accountCredentials = new ServiceAccountCredentials.fromJson({
@@ -35,7 +36,9 @@ class _TodoPageState extends State<TodoPage> {
     GoogleCalendar.CalendarApi.CalendarScope
   ]; //defines the scopes for the calendar api
 
-  void _getCalendarEvents(List<Todo> list) {
+  Future<List<Todo>> _getCalendarEvents(List<Todo> listTodo) async {
+    List<Todo> list = [];
+
     clientViaServiceAccount(accountCredentials, _scopes).then((client) {
       var calendar = new GoogleCalendar.CalendarApi(client);
       var calEvents = calendar.events.list("t0m013h@gmail.com");
@@ -53,22 +56,28 @@ class _TodoPageState extends State<TodoPage> {
             String tmpContent = event.summary;
 
             list.add(new Todo(
-                id: int.parse(event.iCalUID),
+                id: DateTime.now().millisecondsSinceEpoch,
                 content: tmpContent,
                 date: dateUnixTime));
-            print(event.summary);
+            print(list[list.length - 1].content);
           }
         });
       });
     });
 
-    list.sort((a, b) => a.date.compareTo(b.date));
+    if (list != null) {
+      list.sort((a, b) => a.date.compareTo(b.date));
+      listTodo.addAll(list);
+    }
+
+    return list;
   }
 
-  void _init() {
-    _listTodo = DbProvider().getTodoAll();
-    _getCalendarEvents(_listTodo);
-    setState(() {});
+  void _init() async {
+    _listTodo = await DbProvider().getTodoAll();
+    _getCalendarEvents(_listTodo).then((_) {
+      setState(() {});
+    });
   }
 
   @override

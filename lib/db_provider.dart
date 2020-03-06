@@ -179,16 +179,16 @@ class DbProvider {
     });
   }
 
-  List<Todo> getTodoAll() {
+  Future<List<Todo>> getTodoAll() async {
     // query sorted todo list in ascending order
-    _db.query('todo', orderBy: 'date ASC').then(((maps) {
-      return List.generate(maps.length, (i) {
-        return Todo(
-            id: maps[i]['id'],
-            content: maps[i]['content'],
-            date: maps[i]['date']);
-      });
-    }));
+    List<Map<String, dynamic>> maps =
+        await _db.query('todo', orderBy: 'date ASC');
+    return List.generate(maps.length, (i) {
+      return Todo(
+          id: maps[i]['id'],
+          content: maps[i]['content'],
+          date: maps[i]['date']);
+    });
   }
 
   Future<List<Memo>> getMemoAll() async {
