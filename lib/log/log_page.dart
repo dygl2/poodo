@@ -12,6 +12,7 @@ import 'package:poodo/log/condition_log.dart';
 import 'package:poodo/todo/todo.dart';
 import 'package:googleapis/calendar/v3.dart' as GoogleCalendar;
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:poodo/account_credential.dart';
 
 class LogPage extends StatefulWidget {
   @override
@@ -28,15 +29,15 @@ class _LogPageState extends State<LogPage> {
   List<Expense> _listDailyuse = [];
   List<Expense> _listHealthcare = [];
   List<Expense> _listLuxury = [];
-  List<ConditionLog> _morningCondition;
-  List<ConditionLog> _noonCondition;
-  List<ConditionLog> _nightCondition;
+  List<ConditionLog> _morningCondition = [];
+  List<ConditionLog> _noonCondition = [];
+  List<ConditionLog> _nightCondition = [];
   int _conditionRank = 70;
-  Aggregate _aggregate;
+  Aggregate _aggregate = new Aggregate(DateTime.now());
 
   _LogPageState();
 
-  final accountCredentials = new ServiceAccountCredentials.fromJson({});
+  final accountCredentials = new ServiceAccountCredentials.fromJson(credential);
 
   var _scopes = [
     GoogleCalendar.CalendarApi.CalendarScope
