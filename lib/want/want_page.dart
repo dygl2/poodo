@@ -42,45 +42,62 @@ class _WantPageState extends State<WantPage> {
         body: Stack(
           children: <Widget>[
             Container(
-              child: ListView.builder(
-                itemCount: _listWant.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: ListTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 4,
-                            child: Text(_listWant[index].title),
-                          ),
-                          Container(
-                            width: 40,
-                            child: InkWell(
-                              child: Icon(
-                                Icons.remove_circle,
-                                color: Colors.redAccent,
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  DbProvider()
-                                      .delete(type, _listWant[index].id);
-                                  _listWant.removeAt(index);
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        setState(() {
-                          _edit(_listWant[index], index);
-                        });
-                      },
-                    ),
-                  );
+              child: ReorderableListView(
+                onReorder: (oldIndex, newIndex) async {
+                  Want want;
+                  setState(() {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    want = _listWant.removeAt(oldIndex);
+
+                    _listWant.insert(newIndex, want);
+                  });
+                  if (want != null) {
+                    await DbProvider().delete('want', oldIndex);
+                    await DbProvider().insert('want', want);
+                  }
                 },
+                children: List.generate(
+                  _listWant.length,
+                  (index) {
+                    return Card(
+                      key: Key(_listWant[index].id.toString()),
+                      child: ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 4,
+                              child: Text(_listWant[index].title),
+                            ),
+                            Container(
+                              width: 40,
+                              child: InkWell(
+                                child: Icon(
+                                  Icons.remove_circle,
+                                  color: Colors.redAccent,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    DbProvider()
+                                        .delete(type, _listWant[index].id);
+                                    _listWant.removeAt(index);
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _edit(_listWant[index], index);
+                          });
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
