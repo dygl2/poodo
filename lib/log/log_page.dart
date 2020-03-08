@@ -72,7 +72,7 @@ class _LogPageState extends State<LogPage> {
           } else {
             date = event.end.date;
           }
-          if (date.isAfter(
+          if (!date.isBefore(
               DateTime.now().add(DateTime.now().timeZoneOffset).toUtc())) {
             int dateUnixTime = date.millisecondsSinceEpoch;
             String tmpContent = event.summary;
