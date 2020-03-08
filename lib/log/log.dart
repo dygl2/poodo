@@ -37,11 +37,12 @@ class Log {
     List<Expense> _listLuxury =
         await DbProvider().getExpenseAll(LogCategory.luxury);
 
-    List<List<Expense>> _lists = [];
-    _lists.add(_listFood);
-    _lists.add(_listDailyuse);
-    _lists.add(_listHealthcare);
-    _lists.add(_listLuxury);
+    List<List<Expense>> _lists = [
+      _listFood,
+      _listDailyuse,
+      _listHealthcare,
+      _listLuxury
+    ];
 
     for (var ls in _lists) {
       for (var item in ls) {

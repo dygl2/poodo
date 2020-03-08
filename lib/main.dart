@@ -22,12 +22,12 @@ class MainApp extends StatelessWidget {
     TabInfo("todo", TodoPage()),
     TabInfo("want", WantPage()),
     TabInfo("memo", MemoPage()),
-  ];
+  ]..length = 4;
 
   final List<String> _settingMenu = [
     "Color theme (TBD)",
     "Clear database",
-  ];
+  ]..length = 2;
 
   @override
   Widget build(BuildContext context) {
