@@ -29,9 +29,24 @@ class _LogPageState extends State<LogPage> {
   List<Expense> _listDailyuse = [];
   List<Expense> _listHealthcare = [];
   List<Expense> _listLuxury = [];
-  List<ConditionLog> _morningCondition = [];
-  List<ConditionLog> _noonCondition = [];
-  List<ConditionLog> _nightCondition = [];
+  List<ConditionLog> _morningCondition = [
+    new ConditionLog(
+        date: DateTime.now().toString(),
+        category: ConditionCategory.MORNING.index,
+        condition: Condition.MODERATELY_GOOD.index)
+  ]..length = 1;
+  List<ConditionLog> _noonCondition = [
+    new ConditionLog(
+        date: DateTime.now().toString(),
+        category: ConditionCategory.NOON.index,
+        condition: Condition.MODERATELY_GOOD.index)
+  ]..length = 1;
+  List<ConditionLog> _nightCondition = [
+    new ConditionLog(
+        date: DateTime.now().toString(),
+        category: ConditionCategory.NIGHT.index,
+        condition: Condition.MODERATELY_GOOD.index)
+  ]..length = 1;
   int _conditionRank = 70;
   Aggregate _aggregate = new Aggregate(DateTime.now());
 
