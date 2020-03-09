@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/log/aggregate.dart';
 import 'package:poodo/log/category_breakdown_page.dart';
@@ -10,8 +11,8 @@ import 'package:poodo/log/log.dart';
 import 'package:poodo/log/log_category.dart';
 import 'package:poodo/log/condition_log.dart';
 import 'package:poodo/todo/todo.dart';
-import 'package:googleapis/calendar/v3.dart' as GoogleCalendar;
-import 'package:googleapis_auth/auth_io.dart';
+//import 'package:googleapis/calendar/v3.dart' as GoogleCalendar;
+//import 'package:googleapis_auth/auth_io.dart';
 import 'package:poodo/account_credential.dart';
 
 class LogPage extends StatefulWidget {
@@ -52,47 +53,50 @@ class _LogPageState extends State<LogPage> {
 
   _LogPageState();
 
-  final accountCredentials = new ServiceAccountCredentials.fromJson(credential);
+  //final accountCredentials = new ServiceAccountCredentials.fromJson(credential);
 
-  var _scopes = [
-    GoogleCalendar.CalendarApi.CalendarScope
-  ]; //defines the scopes for the calendar api
+  //var _scopes = [
+  //GoogleCalendar.CalendarApi.CalendarScope
+  //]; //defines the scopes for the calendar api
 
-  Future<List<Todo>> _getCalendarEvents() async {
-    List<Todo> list = [];
+  //Future<List<Todo>> _getCalendarEvents() async {
+  //List<Todo> list = [];
 
-    clientViaServiceAccount(accountCredentials, _scopes).then((client) {
-      var calendar = new GoogleCalendar.CalendarApi(client);
-      var calEvents = calendar.events.list("t0m013h@gmail.com");
-      calEvents.then((GoogleCalendar.Events events) {
-        events.items.forEach((GoogleCalendar.Event event) {
-          DateTime date;
-          if (event.start.dateTime != null) {
-            date = event.start.dateTime;
-          } else {
-            date = event.end.date;
-          }
-          if (!date.isBefore(
-              DateTime.now().add(DateTime.now().timeZoneOffset).toUtc())) {
-            int dateUnixTime = date.millisecondsSinceEpoch;
-            String tmpContent = event.summary;
+  //clientViaServiceAccount(accountCredentials, _scopes).then((client) {
+  //var calendar = new GoogleCalendar.CalendarApi(client);
+  //var calEvents = calendar.events.list("t0m013h@gmail.com");
+  //calEvents.then((GoogleCalendar.Events events) {
+  //events.items.forEach((GoogleCalendar.Event event) {
 
-            list.add(new Todo(
-                id: DateTime.now().millisecondsSinceEpoch,
-                content: tmpContent,
-                date: dateUnixTime));
-            print(list[list.length - 1].content);
-          }
-        });
-      });
-    });
+  //DateTime date;
+  //if (event.start.dateTime != null) {
+  //date = event.start.dateTime;
+  //} else {
+  //date = event.end.date;
+  //}
+  //if (!date.isBefore(
+  //DateTime.now().add(DateTime.now().timeZoneOffset).toUtc())) {
+  //int dateUnixTime = date.millisecondsSinceEpoch;
+  //String tmpContent = event.summary;
 
-    if (list != null) {
-      list.sort((a, b) => a.date.compareTo(b.date));
-    }
+  //list.add(new Todo(
+  //id: DateTime.now().millisecondsSinceEpoch,
+  //content: tmpContent,
+  //date: dateUnixTime));
+  //print(list[list.length - 1].content);
+  //}
+  //});
 
-    return list;
-  }
+  //});
+  //});
+  //});
+
+  //if (list != null) {
+  //list.sort((a, b) => a.date.compareTo(b.date));
+  //}
+
+  //return list;
+  //}
 
   Future<void> _init() async {
     await DbProvider().database;
@@ -112,7 +116,7 @@ class _LogPageState extends State<LogPage> {
     _updateConditionRank();
 
     // TODO: this should be in todo_page.dart
-    listEvents = await _getCalendarEvents();
+    //listEvents = await _getCalendarEvents();
 
     setState(() {});
   }
