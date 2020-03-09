@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/todo/edit_todo_page.dart';
 import 'package:poodo/todo/todo.dart';
 import 'package:poodo/log/log_page.dart';
+import 'package:poodo/account_credential.dart';
 
 class TodoPage extends StatefulWidget {
   @override
@@ -15,8 +19,67 @@ class _TodoPageState extends State<TodoPage> {
   List<Todo> _listTodo = [];
   int _index = 0;
 
+  Future<List<Todo>> _getCalendarEvents() async {
+    List<Todo> list = [];
+
+    //clientViaServiceAccount(accountCredentials, _scopes).then((client) {
+    //var calendar = new GoogleCalendar.CalendarApi(client);
+    //var calEvents = calendar.events.list("t0m013h@gmail.com");
+    //calEvents.then((GoogleCalendar.Events events) {
+    //events.items.forEach((GoogleCalendar.Event event) {
+
+    http.Response response = await http.get(
+        "https://www.googleapis.com/calendar/v3/calendars/" +
+            calendarId +
+            "/events?key=" +
+            apiKey);
+
+    DateTime date;
+    //if (event.start.dateTime != null) {
+    //date = event.start.dateTime;
+    //} else {
+    //date = event.end.date;
+    //}
+    Map data = json.decode(response.body);
+
+    List<Map> tmpData = data['items'].cast<Map>() as List<Map>;
+
+    tmpData.forEach((Map m) {
+      Map start = m['start'];
+      Map end = m['end'];
+      if (start['dateTime'] != null) {
+        date = DateTime.parse(start['dateTime']);
+      } else {
+        date = DateTime.parse(end['date']);
+      }
+      if (!date.isBefore(
+          DateTime.now().add(DateTime.now().timeZoneOffset).toUtc())) {
+        int dateUnixTime = date.millisecondsSinceEpoch;
+        //String tmpContent = event.summary;
+        String tmpContent = m['summary'];
+
+        list.add(new Todo(
+            id: DateTime.now().millisecondsSinceEpoch,
+            content: tmpContent,
+            date: dateUnixTime));
+        print(list[list.length - 1].content);
+      }
+    });
+
+    //});
+    //});
+    //});
+
+    if (list != null) {
+      list.sort((a, b) => a.date.compareTo(b.date));
+    }
+
+    return list;
+  }
+
   void _init() async {
     _listTodo = await DbProvider().getTodoAll();
+    listEvents = await _getCalendarEvents();
     _listTodo.addAll(listEvents);
     _listTodo.sort((a, b) => a.date.compareTo(b.date));
     setState(() {});

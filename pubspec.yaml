@@ -36,6 +36,8 @@ dependencies:
 
   charts_flutter: ^0.8.1
 
+  http: any
+
   googleapis: ^0.54.0
 
   googleapis_auth: ^0.2.11+1
