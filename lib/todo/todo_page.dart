@@ -17,6 +17,7 @@ class TodoPage extends StatefulWidget {
 class _TodoPageState extends State<TodoPage> {
   final String type = "todo";
   List<Todo> _listTodo = [];
+  List<Todo> _listEvents = [];
   int _index = 0;
 
   Future<List<Todo>> _getCalendarEvents() async {
@@ -79,8 +80,8 @@ class _TodoPageState extends State<TodoPage> {
 
   void _init() async {
     _listTodo = await DbProvider().getTodoAll();
-    listEvents = await _getCalendarEvents();
-    _listTodo.addAll(listEvents);
+    _listEvents = await _getCalendarEvents();
+    _listTodo.addAll(_listEvents);
     _listTodo.sort((a, b) => a.date.compareTo(b.date));
     setState(() {});
   }

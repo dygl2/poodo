@@ -10,17 +10,17 @@ import 'package:poodo/log/expense.dart';
 import 'package:poodo/log/log.dart';
 import 'package:poodo/log/log_category.dart';
 import 'package:poodo/log/condition_log.dart';
-import 'package:poodo/todo/todo.dart';
+//import 'package:poodo/todo/todo.dart';
 //import 'package:googleapis/calendar/v3.dart' as GoogleCalendar;
 //import 'package:googleapis_auth/auth_io.dart';
-import 'package:poodo/account_credential.dart';
+//import 'package:poodo/account_credential.dart';
 
 class LogPage extends StatefulWidget {
   @override
   _LogPageState createState() => _LogPageState();
 }
 
-List<Todo> listEvents = [];
+//List<Todo> listEvents = [];
 
 class _LogPageState extends State<LogPage> {
   DateTime _date;
