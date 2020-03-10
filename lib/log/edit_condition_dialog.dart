@@ -16,7 +16,7 @@ class EditConditionDialog extends StatelessWidget {
                       image: AssetImage('assets/icons/very_good.png'),
                       width: 30.0,
                     ),
-                    Text('Very Good'),
+                    Text(' Very Good'),
                   ],
                 ),
                 onPressed: () {
@@ -30,7 +30,7 @@ class EditConditionDialog extends StatelessWidget {
                       image: AssetImage('assets/icons/moderately_good.png'),
                       width: 30.0,
                     ),
-                    Text('Moderately Good'),
+                    Text(' Moderately Good'),
                   ],
                 ),
                 onPressed: () {
@@ -44,7 +44,7 @@ class EditConditionDialog extends StatelessWidget {
                       image: AssetImage('assets/icons/not_very_good.png'),
                       width: 30.0,
                     ),
-                    Text('Not Very Good'),
+                    Text(' Not Very Good'),
                   ],
                 ),
                 onPressed: () {
@@ -58,7 +58,7 @@ class EditConditionDialog extends StatelessWidget {
                       image: AssetImage('assets/icons/very_bad.png'),
                       width: 30.0,
                     ),
-                    Text('Very Bad'),
+                    Text(' Very Bad'),
                   ],
                 ),
                 onPressed: () {
