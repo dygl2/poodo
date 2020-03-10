@@ -59,10 +59,8 @@ class _TodoPageState extends State<TodoPage> {
         //String tmpContent = event.summary;
         String tmpContent = m['summary'];
 
-        list.add(new Todo(
-            id: DateTime.now().millisecondsSinceEpoch,
-            content: tmpContent,
-            date: dateUnixTime));
+        // googole calendar event id is 0
+        list.add(new Todo(id: 0, content: tmpContent, date: dateUnixTime));
         print(list[list.length - 1].content);
       }
     });
@@ -150,14 +148,20 @@ class _TodoPageState extends State<TodoPage> {
                             width: 40,
                             child: InkWell(
                               child: Icon(
-                                Icons.remove_circle,
-                                color: Colors.redAccent,
+                                _listTodo[index].id == 0
+                                    ? Icons.calendar_today
+                                    : Icons.remove_circle,
+                                color: _listTodo[index].id == 0
+                                    ? Colors.black
+                                    : Colors.redAccent,
                               ),
                               onTap: () {
                                 setState(() {
-                                  DbProvider()
-                                      .delete(type, _listTodo[index].id);
-                                  _listTodo.removeAt(index);
+                                  if (_listTodo[index].id != 0) {
+                                    DbProvider()
+                                        .delete(type, _listTodo[index].id);
+                                    _listTodo.removeAt(index);
+                                  }
                                 });
                               },
                             ),
