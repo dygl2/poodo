@@ -12,9 +12,14 @@ class _WantPageState extends State<WantPage> {
   final String type = "want";
   List<Want> _listWant = [];
   int _index = 0;
+  int _maxNumber = 1;
 
   void _init() async {
     _listWant = await DbProvider().getWantAll();
+    if (_listWant.length > 0) {
+      _maxNumber = _listWant[_listWant.length - 1].number + 1;
+    }
+    await _updateNumber();
 
     setState(() {});
   }
@@ -56,6 +61,7 @@ class _WantPageState extends State<WantPage> {
                   if (want != null) {
                     await DbProvider().delete('want', oldIndex);
                     await DbProvider().insert('want', want);
+                    await _updateNumber();
                   }
                 },
                 children: List.generate(
@@ -78,12 +84,14 @@ class _WantPageState extends State<WantPage> {
                                   Icons.remove_circle,
                                   color: Colors.redAccent,
                                 ),
-                                onTap: () {
+                                onTap: () async {
                                   setState(() {
                                     DbProvider()
                                         .delete(type, _listWant[index].id);
                                     _listWant.removeAt(index);
                                   });
+
+                                  await _updateNumber();
                                 },
                               ),
                             ),
@@ -108,9 +116,10 @@ class _WantPageState extends State<WantPage> {
     setState(() {
       _index = _listWant.length;
       int id = DateTime.now().millisecondsSinceEpoch;
-      Want want = new Want(id: id, title: "", content: "");
+      Want want = new Want(id: id, title: "", number: _maxNumber, content: "");
       DbProvider().insert(type, want);
       _listWant.add(want);
+      _maxNumber++;
 
       Navigator.of(context)
           .push(MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -134,9 +143,19 @@ class _WantPageState extends State<WantPage> {
     setState(() {
       _listWant[_index].id = want.id;
       _listWant[_index].title = want.title;
+      _listWant[_index].number = want.number;
       _listWant[_index].content = want.content;
 
       DbProvider().update(type, want, _listWant[_index].id);
+    });
+  }
+
+  Future<void> _updateNumber() async {
+    int num = 1;
+    _listWant.forEach((Want p) {
+      p.number = num;
+      DbProvider().update('want', p, p.id);
+      num++;
     });
   }
 }
