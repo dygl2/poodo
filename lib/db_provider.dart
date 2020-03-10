@@ -35,7 +35,7 @@ class DbProvider {
 
       _db = await openDatabase(
         path,
-        version: 3,
+        version: 4,
         onCreate: (Database newDb, int version) {
           newDb.execute("""
               CREATE TABLE todo
@@ -58,6 +58,7 @@ class DbProvider {
                 (
                   id INTEGER PRIMARY KEY,
                   title TEXT,
+                  number INTEGER,
                   content TEXT
                 )
               """);
@@ -175,6 +176,7 @@ class DbProvider {
       return Want(
           id: maps[i]['id'],
           title: maps[i]['title'],
+          number: maps[i]['number'],
           content: maps[i]['content']);
     });
   }
@@ -202,11 +204,13 @@ class DbProvider {
   }
 
   Future<List<Want>> getWantAll() async {
-    List<Map<String, dynamic>> maps = await _db.query('want');
+    List<Map<String, dynamic>> maps =
+        await _db.query('want', orderBy: 'number ASC');
     return List.generate(maps.length, (i) {
       return Want(
           id: maps[i]['id'],
           title: maps[i]['title'],
+          number: maps[i]['number'],
           content: maps[i]['content']);
     });
   }
