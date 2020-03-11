@@ -112,7 +112,9 @@ class _TodoPageState extends State<TodoPage> {
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
-                    color: Colors.grey[100],
+                    color: _listTodo[index].id == 0
+                        ? Colors.grey[100]
+                        : Colors.white,
                     child: ListTile(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
