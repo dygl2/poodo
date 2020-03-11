@@ -112,6 +112,7 @@ class _TodoPageState extends State<TodoPage> {
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
+                    color: Colors.grey[100],
                     child: ListTile(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,7 +171,9 @@ class _TodoPageState extends State<TodoPage> {
                       ),
                       onTap: () {
                         setState(() {
-                          _edit(_listTodo[index], index);
+                          if (_listTodo[index].id != 0) {
+                            _edit(_listTodo[index], index);
+                          }
                         });
                       },
                     ),
