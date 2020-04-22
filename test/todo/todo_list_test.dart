@@ -1,15 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:poodo/todo/TodoList.dart';
+import 'package:poodo/todo/todo.dart';
+import 'package:poodo/todo/todo_list.dart';
 
 void main() {
   TodoList todoList;
 
   setUp(() {
     todoList = TodoList(<Todo>[
-      Todo(1, "test1", 1),
-      Todo(2, "test2", 2),
-      Todo(3, "test3", 3),
+      Todo(id: 1, content: "test1", date: 1),
+      Todo(id: 2, content: "test2", date: 2),
+      Todo(id: 3, content: "test3", date: 3),
     ]);
   });
 
@@ -18,9 +19,16 @@ void main() {
       expect(todoList.length(), 3);
     });
 
-    test('add 1 data' () {
-      todoList.add(Todo(4, "test4", 4));
+    test('add 1 data', () {
+      todoList.add(Todo(id: 4, content: "test4", date: 4));
       expect(todoList.length(), 4);
+    });
+
+    test('get first data', () {
+      Todo data = todoList.reference(0);
+      expect(data.id, 1);
+      expect(data.content, "test1");
+      expect(data.date, 1);
     });
   });
 }
