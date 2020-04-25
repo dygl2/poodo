@@ -20,8 +20,13 @@ void main() {
     });
 
     test('add 1 data', () {
-      todoList.add(Todo(id: 4, content: "test4", date: 4));
+      todoList.add();
       expect(todoList.length(), 4);
+    });
+
+    test('delete 1 data', () {
+      todoList.delete(2);
+      expect(todoList.length(), 2);
     });
 
     test('get first data', () {
