@@ -14,4 +14,18 @@ class Todo extends Data {
       'date': date,
     };
   }
+
+  bool isEvent() {
+    if (id == 0) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isPastDate() {
+    if (DateTime.now().isBefore(DateTime.fromMillisecondsSinceEpoch(date))) {
+      return true;
+    }
+    return false;
+  }
 }
