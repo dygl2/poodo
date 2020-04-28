@@ -7,20 +7,14 @@ import 'package:poodo/log/aggregate.dart';
 import 'package:poodo/log/category_breakdown_page.dart';
 import 'package:poodo/log/edit_condition_dialog.dart';
 import 'package:poodo/log/expense.dart';
-import 'package:poodo/log/log.dart';
+import 'package:poodo/log/log_service.dart';
 import 'package:poodo/log/log_category.dart';
 import 'package:poodo/log/condition_log.dart';
-//import 'package:poodo/todo/todo.dart';
-//import 'package:googleapis/calendar/v3.dart' as GoogleCalendar;
-//import 'package:googleapis_auth/auth_io.dart';
-//import 'package:poodo/account_credential.dart';
 
 class LogPage extends StatefulWidget {
   @override
   _LogPageState createState() => _LogPageState();
 }
-
-//List<Todo> listEvents = [];
 
 class _LogPageState extends State<LogPage> {
   DateTime _date;
@@ -53,70 +47,25 @@ class _LogPageState extends State<LogPage> {
 
   _LogPageState();
 
-  //final accountCredentials = new ServiceAccountCredentials.fromJson(credential);
-
-  //var _scopes = [
-  //GoogleCalendar.CalendarApi.CalendarScope
-  //]; //defines the scopes for the calendar api
-
-  //Future<List<Todo>> _getCalendarEvents() async {
-  //List<Todo> list = [];
-
-  //clientViaServiceAccount(accountCredentials, _scopes).then((client) {
-  //var calendar = new GoogleCalendar.CalendarApi(client);
-  //var calEvents = calendar.events.list("t0m013h@gmail.com");
-  //calEvents.then((GoogleCalendar.Events events) {
-  //events.items.forEach((GoogleCalendar.Event event) {
-
-  //DateTime date;
-  //if (event.start.dateTime != null) {
-  //date = event.start.dateTime;
-  //} else {
-  //date = event.end.date;
-  //}
-  //if (!date.isBefore(
-  //DateTime.now().add(DateTime.now().timeZoneOffset).toUtc())) {
-  //int dateUnixTime = date.millisecondsSinceEpoch;
-  //String tmpContent = event.summary;
-
-  //list.add(new Todo(
-  //id: DateTime.now().millisecondsSinceEpoch,
-  //content: tmpContent,
-  //date: dateUnixTime));
-  //print(list[list.length - 1].content);
-  //}
-  //});
-
-  //});
-  //});
-  //});
-
-  //if (list != null) {
-  //list.sort((a, b) => a.date.compareTo(b.date));
-  //}
-
-  //return list;
-  //}
-
   Future<void> _init() async {
     await DbProvider().database;
 
-    _listFood = await Log.getLogAtDay(LogCategory.food, _date);
-    _listDailyuse = await Log.getLogAtDay(LogCategory.dailyuse, _date);
-    _listHealthcare = await Log.getLogAtDay(LogCategory.healthcare, _date);
-    _listLuxury = await Log.getLogAtDay(LogCategory.luxury, _date);
+    _listFood = await LogService.getLogAtDay(LogCategory.food, _date);
+    _listDailyuse = await LogService.getLogAtDay(LogCategory.dailyuse, _date);
+    _listHealthcare =
+        await LogService.getLogAtDay(LogCategory.healthcare, _date);
+    _listLuxury = await LogService.getLogAtDay(LogCategory.luxury, _date);
 
-    _aggregate = await Log.getAggregate(_date);
+    _aggregate = await LogService.getAggregate(_date);
 
     _morningCondition =
-        await Log.getConditionLog(_date, ConditionCategory.MORNING);
-    _noonCondition = await Log.getConditionLog(_date, ConditionCategory.NOON);
-    _nightCondition = await Log.getConditionLog(_date, ConditionCategory.NIGHT);
+        await LogService.getConditionLog(_date, ConditionCategory.MORNING);
+    _noonCondition =
+        await LogService.getConditionLog(_date, ConditionCategory.NOON);
+    _nightCondition =
+        await LogService.getConditionLog(_date, ConditionCategory.NIGHT);
 
     _updateConditionRank();
-
-    // TODO: this should be in todo_page.dart
-    //listEvents = await _getCalendarEvents();
 
     setState(() {});
   }
@@ -359,7 +308,7 @@ class _LogPageState extends State<LogPage> {
         color: Colors.yellow[200],
         child: Text(category.toString().split('.')[1]),
         onPressed: () async {
-          await Log.addLog(context, category, date);
+          await LogService.addLog(context, category, date);
           await _init();
         },
         shape: UnderlineInputBorder(),
@@ -388,12 +337,12 @@ class _LogPageState extends State<LogPage> {
                   ],
                 ),
                 onTap: () async {
-                  await Log.updateLog(context, category, list[index].cost,
-                      list[index].remarks, list[index].id);
+                  await LogService.updateLog(context, category,
+                      list[index].cost, list[index].remarks, list[index].id);
                   await _init();
                 },
                 onLongPress: () async {
-                  await Log.deleteLog(context, category, list, index);
+                  await LogService.deleteLog(context, category, list, index);
                   await _init();
                 }),
           );
