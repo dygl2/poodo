@@ -65,7 +65,10 @@ class _LogPageState extends State<LogPage> {
     _nightCondition =
         await LogService.getConditionLog(_date, ConditionCategory.NIGHT);
 
-    _updateConditionRank();
+    _conditionRank = ConditionLog.updateConditionRank(
+        _morningCondition[0].condition,
+        _noonCondition[0].condition,
+        _nightCondition[0].condition);
 
     setState(() {});
   }
@@ -219,7 +222,11 @@ class _LogPageState extends State<LogPage> {
                                   _morningCondition[0].id);
 
                               setState(() {
-                                _updateConditionRank();
+                                _conditionRank =
+                                    ConditionLog.updateConditionRank(
+                                        _morningCondition[0].condition,
+                                        _noonCondition[0].condition,
+                                        _nightCondition[0].condition);
                               });
                             }),
                       ],
@@ -243,7 +250,11 @@ class _LogPageState extends State<LogPage> {
                                   _noonCondition[0], _noonCondition[0].id);
 
                               setState(() {
-                                _updateConditionRank();
+                                _conditionRank =
+                                    ConditionLog.updateConditionRank(
+                                        _morningCondition[0].condition,
+                                        _noonCondition[0].condition,
+                                        _nightCondition[0].condition);
                               });
                             }),
                       ],
@@ -268,7 +279,11 @@ class _LogPageState extends State<LogPage> {
                                   _nightCondition[0], _nightCondition[0].id);
 
                               setState(() {
-                                _updateConditionRank();
+                                _conditionRank =
+                                    ConditionLog.updateConditionRank(
+                                        _morningCondition[0].condition,
+                                        _noonCondition[0].condition,
+                                        _nightCondition[0].condition);
                               });
                             }),
                       ],
@@ -370,12 +385,5 @@ class _LogPageState extends State<LogPage> {
     }
 
     return ret;
-  }
-
-  void _updateConditionRank() {
-    _conditionRank = 100 -
-        _morningCondition[0].condition * 10 -
-        _noonCondition[0].condition * 10 -
-        _nightCondition[0].condition * 10;
   }
 }

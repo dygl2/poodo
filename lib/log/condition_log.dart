@@ -16,6 +16,10 @@ class ConditionLog extends Data {
       'condition': condition,
     };
   }
+
+  static int updateConditionRank(int morning, int noon, int night) {
+    return 100 - morning * 10 - noon * 10 - night * 10;
+  }
 }
 
 enum ConditionCategory {
