@@ -12,7 +12,7 @@ import 'package:poodo/log/dailyuse.dart';
 import 'package:poodo/log/healthcare.dart';
 import 'package:poodo/log/luxury.dart';
 
-class Log {
+class LogService {
   static DateFormat _format = DateFormat('yyyy-MM-dd', 'ja');
 
   static Future<List<Expense>> getLogAtDay(
