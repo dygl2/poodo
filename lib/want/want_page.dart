@@ -65,7 +65,7 @@ class _WantPageState extends State<WantPage> {
                   }
                 },
                 children: List.generate(
-                  _listWant.length,
+                  _listWant.length - 2,
                   (index) {
                     return Card(
                       key: Key(_listWant[index].id.toString()),
