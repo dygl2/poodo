@@ -206,7 +206,7 @@ class _LogPageState extends State<LogPage> {
                       children: <Widget>[
                         Text('morning'),
                         IconButton(
-                            icon: _setConditionLog(
+                            icon: ConditionLog.setConditionLog(
                                 _morningCondition[0].condition),
                             onPressed: () async {
                               var result =
@@ -237,7 +237,8 @@ class _LogPageState extends State<LogPage> {
                       children: <Widget>[
                         Text('noon'),
                         IconButton(
-                            icon: _setConditionLog(_noonCondition[0].condition),
+                            icon: ConditionLog.setConditionLog(
+                                _noonCondition[0].condition),
                             onPressed: () async {
                               var result =
                                   await EditConditionDialog.displayDialog(
@@ -265,8 +266,8 @@ class _LogPageState extends State<LogPage> {
                       children: <Widget>[
                         Text('night'),
                         IconButton(
-                            icon:
-                                _setConditionLog(_nightCondition[0].condition),
+                            icon: ConditionLog.setConditionLog(
+                                _nightCondition[0].condition),
                             onPressed: () async {
                               var result =
                                   await EditConditionDialog.displayDialog(
@@ -364,26 +365,5 @@ class _LogPageState extends State<LogPage> {
         },
       ),
     );
-  }
-
-  dynamic _setConditionLog(int cnd) {
-    Image ret;
-
-    switch (Condition.values[cnd]) {
-      case Condition.VERY_BAD:
-        ret = new Image.asset('assets/icons/very_bad.png');
-        break;
-      case Condition.NOT_VERY_GOOD:
-        ret = new Image.asset('assets/icons/not_very_good.png');
-        break;
-      case Condition.MODERATELY_GOOD:
-        ret = new Image.asset('assets/icons/moderately_good.png');
-        break;
-      case Condition.VERY_GOOD:
-        ret = new Image.asset('assets/icons/very_good.png');
-        break;
-    }
-
-    return ret;
   }
 }
