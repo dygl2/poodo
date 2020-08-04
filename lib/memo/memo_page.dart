@@ -43,45 +43,63 @@ class _MemoPageState extends State<MemoPage> {
         body: Stack(
           children: <Widget>[
             Container(
-              child: ListView.builder(
-                itemCount: _listMemo.length(),
-                scrollDirection: Axis.vertical,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: ListTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 4,
-                            child: Text(_listMemo.reference(index).title),
-                          ),
-                          Container(
-                            width: 40,
-                            child: InkWell(
-                              child: Icon(
-                                Icons.remove_circle,
-                                color: Colors.redAccent,
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  DbProvider().delete(
-                                      type, _listMemo.reference(index).id);
-                                  _listMemo.delete(index);
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        setState(() {
-                          _edit(_listMemo.reference(index), index);
-                        });
-                      },
-                    ),
-                  );
+              child: ReorderableListView(
+                onReorder: (oldIndex, newIndex) async {
+                  Memo memo;
+                  setState(() {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    memo = _listMemo.reference(oldIndex);
+                    _listMemo.delete(oldIndex);
+
+                    _listMemo.insert(newIndex, memo);
+                  });
+                  if (memo != null) {
+                    await DbProvider().delete('memo', oldIndex);
+                    await DbProvider().insert('memo', memo);
+                    await _updateNumber();
+                  }
                 },
+                children: List.generate(
+                  _listMemo.length(),
+                  (index) {
+                    return Card(
+                      child: ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 4,
+                              child: Text(_listMemo.reference(index).title),
+                            ),
+                            Container(
+                              width: 40,
+                              child: InkWell(
+                                child: Icon(
+                                  Icons.remove_circle,
+                                  color: Colors.redAccent,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    DbProvider().delete(
+                                        type, _listMemo.reference(index).id);
+                                    _listMemo.delete(index);
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          setState(() {
+                            _edit(_listMemo.reference(index), index);
+                          });
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -116,6 +134,17 @@ class _MemoPageState extends State<MemoPage> {
     setState(() {
       _listMemo.update(memo, _index);
       DbProvider().update(type, memo, _listMemo.reference(_index).id);
+    });
+  }
+
+  Future<void> _updateNumber() async {
+    int num = 1;
+    List<Memo> list = _listMemo.referenceList();
+
+    list.forEach((Memo p) {
+      p.number = num;
+      DbProvider().update('memo', p, p.id);
+      num++;
     });
   }
 }
