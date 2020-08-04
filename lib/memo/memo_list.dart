@@ -6,8 +6,8 @@ class MemoList {
 
   MemoList(list);
 
-  void getMemoAll() {
-    DbProvider().getMemoAll();
+  void getMemoAll() async {
+    list = await DbProvider().getMemoAll();
   }
 
   int length() {
