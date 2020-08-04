@@ -9,6 +9,7 @@ class EditMemoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomSpace = MediaQuery.of(context).viewInsets.bottom;
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Edit Memo'),
@@ -25,6 +26,7 @@ class EditMemoPage extends StatelessWidget {
             shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
           ),
         ),
+        resizeToAvoidBottomInset: false,
         body: new Container(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: <Widget>[
@@ -42,17 +44,23 @@ class EditMemoPage extends StatelessWidget {
                 _onChanged(_memo);
               },
             ),
-            new TextField(
-              controller: TextEditingController(text: _memo.content),
-              decoration: InputDecoration(
-                labelText: "memo content",
+            new SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: bottomSpace),
+                child: TextField(
+                  controller: TextEditingController(text: _memo.content),
+                  decoration: InputDecoration(
+                    labelText: "memo content",
+                  ),
+                  maxLines: 20,
+                  style: new TextStyle(color: Colors.black),
+                  onChanged: (text) {
+                    _memo.content = text;
+                    _onChanged(_memo);
+                  },
+                ),
               ),
-              maxLines: 20,
-              style: new TextStyle(color: Colors.black),
-              onChanged: (text) {
-                _memo.content = text;
-                _onChanged(_memo);
-              },
+              reverse: true,
             ),
           ]),
         ));
