@@ -50,6 +50,7 @@ class DbProvider {
                 (
                   id INTEGER PRIMARY KEY,
                   title TEXT,
+                  number INTEGER, 
                   content TEXT
                 )
               """);
@@ -165,6 +166,7 @@ class DbProvider {
       return Memo(
           id: maps[i]['id'],
           title: maps[i]['title'],
+          number: maps[i]['number'],
           content: maps[i]['content']);
     });
   }
@@ -199,6 +201,7 @@ class DbProvider {
       return Memo(
           id: maps[i]['id'],
           title: maps[i]['title'],
+          number: maps[i]['number'],
           content: maps[i]['content']);
     });
   }

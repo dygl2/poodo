@@ -39,6 +39,10 @@ class MemoList {
     list.removeAt(index);
   }
 
+  void insert(int index, Memo memo) {
+    list.insert(index, memo);
+  }
+
   void update(Memo newData, int index) {
     list[index].id = newData.id;
     list[index].content = newData.content;
