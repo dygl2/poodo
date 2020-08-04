@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:poodo/db_provider.dart';
 import 'package:poodo/memo/edit_memo_page.dart';
 import 'package:poodo/memo/memo.dart';
+import 'package:poodo/memo/memo_list.dart';
 
 class MemoPage extends StatefulWidget {
   @override
@@ -10,11 +11,11 @@ class MemoPage extends StatefulWidget {
 
 class _MemoPageState extends State<MemoPage> {
   final String type = "memo";
-  List<Memo> _listMemo = [];
+  MemoList _listMemo = new MemoList([]);
   int _index = 0;
 
   void _init() async {
-    _listMemo = await DbProvider().getMemoAll();
+    await _listMemo.getMemoAll();
 
     setState(() {});
   }
@@ -43,7 +44,7 @@ class _MemoPageState extends State<MemoPage> {
           children: <Widget>[
             Container(
               child: ListView.builder(
-                itemCount: _listMemo.length,
+                itemCount: _listMemo.length(),
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
@@ -53,7 +54,7 @@ class _MemoPageState extends State<MemoPage> {
                         children: <Widget>[
                           Expanded(
                             flex: 4,
-                            child: Text(_listMemo[index].title),
+                            child: Text(_listMemo.reference(index).title),
                           ),
                           Container(
                             width: 40,
@@ -64,9 +65,9 @@ class _MemoPageState extends State<MemoPage> {
                               ),
                               onTap: () {
                                 setState(() {
-                                  DbProvider()
-                                      .delete(type, _listMemo[index].id);
-                                  _listMemo.removeAt(index);
+                                  DbProvider().delete(
+                                      type, _listMemo.reference(index).id);
+                                  _listMemo.delete(index);
                                 });
                               },
                             ),
@@ -75,7 +76,7 @@ class _MemoPageState extends State<MemoPage> {
                       ),
                       onTap: () {
                         setState(() {
-                          _edit(_listMemo[index], index);
+                          _edit(_listMemo.reference(index), index);
                         });
                       },
                     ),
@@ -89,15 +90,13 @@ class _MemoPageState extends State<MemoPage> {
 
   void _add() {
     setState(() {
-      _index = _listMemo.length;
-      int id = DateTime.now().millisecondsSinceEpoch;
-      Memo memo = new Memo(id: id, title: "", content: "");
-      DbProvider().insert(type, memo);
-      _listMemo.add(memo);
+      _index = _listMemo.length();
+      _listMemo.add();
+      DbProvider().insert(type, _listMemo.reference(_index));
 
       Navigator.of(context)
           .push(MaterialPageRoute<void>(builder: (BuildContext context) {
-        return new EditMemoPage(memo, _onChanged);
+        return new EditMemoPage(_listMemo.reference(_index), _onChanged);
       }));
     });
   }
@@ -115,11 +114,8 @@ class _MemoPageState extends State<MemoPage> {
 
   void _onChanged(Memo memo) {
     setState(() {
-      _listMemo[_index].id = memo.id;
-      _listMemo[_index].title = memo.title;
-      _listMemo[_index].content = memo.content;
-
-      DbProvider().update(type, memo, _listMemo[_index].id);
+      _listMemo.update(memo, _index);
+      DbProvider().update(type, memo, _listMemo.reference(_index).id);
     });
   }
 }
